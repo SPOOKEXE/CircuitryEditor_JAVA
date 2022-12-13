@@ -18,7 +18,7 @@ import java.util.TreeMap;
 import main.display.objects.GuiBase;
 import main.display.objects.GuiObject;
 import main.display.objects.ImageLabel;
-import main.display.variations.Viewport;
+import main.display.variations.SimpleViewport;
 import main.enumerations.ImageScaleType;
 import main.enumerations.ZIndexSortType;
 import main.input.UserInput;
@@ -29,7 +29,7 @@ public class BaseWidget {
 	// Fields //
 	protected boolean initialized;
 	protected boolean started;
-	protected Viewport baseCanvas;
+	protected SimpleViewport baseCanvas;
 	protected GuiBase baseGuiData;
 	protected UserInput userInput;
 	protected ArrayList<GuiObject> renderObjects;
@@ -42,7 +42,7 @@ public class BaseWidget {
 		this.initialized = false;
 		this.started = false;
 		this.baseGuiData = new GuiBase();
-		this.baseCanvas = new Viewport();
+		this.baseCanvas = new SimpleViewport();
 		this.userInput = new UserInput();
 		this.renderObjects = new ArrayList<GuiObject>();
 		this.assortedRenderObjects = null;
@@ -205,7 +205,7 @@ public class BaseWidget {
 		this.setWindowSize(new Vector2(width, height));
 	}
 	
-	public Viewport getViewportCanvas() {
+	public SimpleViewport getViewportCanvas() {
 		return this.baseCanvas;
 	}
 	
@@ -275,7 +275,7 @@ public class BaseWidget {
 	
 	public void drawObjects(Graphics2D g2d) {
 		
-		g2d.translate(0, 30);
+		g2d.translate(0, 30); // control bar
 		
 		for (GuiObject rObject : this.getAssortedRenders()) {
 			
@@ -284,8 +284,9 @@ public class BaseWidget {
 			
 			// TODO: implement anchor point
 			// TODO: implement clip descendants
+			// TODO: implement aspect ratios
 			
-			// TODO: solve this problem, some reason doesnt auto update at start
+			// TODO: solve this problem, some reason doesn't auto update at start
 			rObject.updateAbsolutePosition();
 			rObject.updateAbsoluteSize();
 			// //
@@ -310,10 +311,13 @@ public class BaseWidget {
 					BaseWidget.setImageTransparency(g2d, imageTransparency);
 				}
 				
+				// TODO: make images scale with image label properly
+				
 				ImageScaleType scaleType = imgLabel.getImageScaleType();
 				if (scaleType == ImageScaleType.STRETCH) {
 					// stretch image to fit object
-					g2d.drawImage(drawImage, (int)(absPosition.x), (int)(absPosition.y), (int)absSize.x, (int)absSize.y, null);
+					Image scaled = drawImage.getScaledInstance((int)absSize.x, (int)absSize.y, 0);
+					g2d.drawImage(scaled, (int)(absPosition.x), (int)(absPosition.y), (int)absSize.x, (int)absSize.y, null);
 				}/* else if (scaleType == ImageScaleType.CROP) {
 					// TODO: ScaleType:CROP
 					// scale up to fit all dimensions
@@ -355,13 +359,11 @@ public class BaseWidget {
 	}
 	
 	public void Draw() {
-		
 		// only draw if visible
 		if (!this.baseCanvas.isVisible()) {
 			return;
 		}
 
-		
 		// draw current buffered image
 		BufferedImage currentImage = this.baseCanvas.getBufferedImage();
 		
@@ -384,7 +386,6 @@ public class BaseWidget {
 
 		// set currentBuffered as the new image
 		this.baseCanvas.setBufferedImage(nextImage);
-		
 	}
 	
 }

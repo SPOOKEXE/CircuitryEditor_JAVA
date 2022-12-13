@@ -15,4 +15,13 @@ public class UserInput {
 		keyboard = nkeyboard;
 	}
 	
+	/*
+	 * TODO: event handling for
+	 * - on mouse changed
+	 * - on mouse left click
+	 * - on mouse right click
+	 * - on keyboard key press
+	 * - on keyboard key release
+	 */
+	
 }

@@ -8,13 +8,13 @@ import main.math.Vector2;
 import main.display.Display;
 import main.display.IDisplay;
 
-public class Viewport extends Display implements IDisplay {
+public class SimpleViewport extends Display implements IDisplay {
 	
 	// Fields //
 	protected BufferedImage currentBuffered;
 	
 	// Constructors //
-	public Viewport() {
+	public SimpleViewport() {
 		this.blankImage();
 	}
 	

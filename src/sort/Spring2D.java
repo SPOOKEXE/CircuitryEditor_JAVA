@@ -1,4 +1,6 @@
-package main.math;
+package sort;
+
+import main.math.Vector2;
 
 public class Spring2D {
 

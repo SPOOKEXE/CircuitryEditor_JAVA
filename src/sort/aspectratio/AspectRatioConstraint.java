@@ -1,4 +1,4 @@
-package sort;
+package sort.aspectratio;
 
 import main.display.objects.GuiBase;
 import main.math.Vector2;

@@ -1,4 +1,4 @@
-package main.data;
+package sort.data;
 
 public class ElectricData {
 
@@ -14,5 +14,13 @@ public class ElectricData {
 	
 	// Constructors //
 	public ElectricData() {}
+	
+	// Class Methods //
+	@Override
+	public String toString() {
+		return "ElectricData [Power=" + Power + ", Voltage=" + Voltage + ", Amperage=" + Amperage + ", Resistance="
+				+ Resistance + ", MaxVoltage=" + MaxVoltage + ", MaxAmperage=" + MaxAmperage + ", MaxPower=" + MaxPower
+				+ "]";
+	}
 	
 }

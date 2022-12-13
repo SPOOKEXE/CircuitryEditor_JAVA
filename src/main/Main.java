@@ -6,7 +6,7 @@ import main.widgets.BaseWidget;
 import main.widgets.EditorWidget;
 
 public class Main {
-
+	
 	protected static ArrayList<BaseWidget> widgets;
 
 	public static void update() {

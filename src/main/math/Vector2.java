@@ -2,19 +2,30 @@ package main.math;
 
 public class Vector2 {
 
+	// Fields //
 	public float x, y;
 
-	//OBJECT-BASED //
+	// Constructors //
+	public Vector2( int x, int y ) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	public Vector2( float x, float y ) {
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Vector2( double x, double y ) {
+		this.x = (float) x;
+		this.y = (float) y;
 	}
 	
 	public Vector2() {
 		this.x = this.y = 0;
 	}
 	
-	// OBJECT METHODS //
+	// Class Methods //
 	public Vector2 add( Vector2 other ) {
 		return new Vector2(this.x + other.x, this.y + other.y);
 	}

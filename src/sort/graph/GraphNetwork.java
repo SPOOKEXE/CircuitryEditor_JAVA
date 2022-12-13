@@ -1,4 +1,4 @@
-package main.graph;
+package sort.graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;

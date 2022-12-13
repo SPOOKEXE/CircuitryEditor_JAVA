@@ -1,10 +1,6 @@
 package main.widgets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import main.display.objects.Frame;
-import main.display.objects.GuiObject;
 import main.display.objects.ImageLabel;
 import main.enumerations.ImageScaleType;
 import main.math.Color3;
@@ -23,9 +19,6 @@ public class EditorWidget extends BaseWidget {
 
 	// Class Methods //
 	private void setDefault() {
-
-		ArrayList<GuiObject> createdGuiObjects = new ArrayList<GuiObject>();
-
 		// Test Frames
 		Frame testFrame1 = new Frame();
 		testFrame1.setName("Test Frame 1");
@@ -61,7 +54,7 @@ public class EditorWidget extends BaseWidget {
 		testFrame4.setZIndex(5);
 		testFrame4.setParent(testFrame2);
 		
-		createdGuiObjects.addAll(Arrays.asList(testFrame1, testFrame2, testFrame3, testFrame4));
+		this.appendGuiObjects( testFrame1, testFrame2, testFrame3, testFrame4);
 		
 		ImageLabel testImage1 = new ImageLabel();
 		testImage1.setName("Test Image 1");
@@ -75,9 +68,8 @@ public class EditorWidget extends BaseWidget {
 		testImage1.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
 		testImage1.setImageTransparency(0.3F);
 		testImage1.setParent(this.baseGuiData);
-		createdGuiObjects.addAll(Arrays.asList(testImage1));
 		
-		this.appendGuiObjects(createdGuiObjects);
+		this.appendGuiObjects(testImage1);
 	}
 
 	@Override

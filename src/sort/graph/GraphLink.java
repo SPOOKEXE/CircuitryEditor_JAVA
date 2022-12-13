@@ -1,4 +1,4 @@
-package main.graph;
+package sort.graph;
 
 public class GraphLink {
 
