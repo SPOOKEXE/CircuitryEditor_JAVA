@@ -3,7 +3,7 @@ package main.display.objects;
 import java.util.UUID;
 
 import main.data.Attributes;
-import main.math.Vector2;
+import main.math.Vector2int;
 
 public class GuiBase {
 
@@ -13,8 +13,8 @@ public class GuiBase {
 	protected String name;
 	protected GuiBase parent;
 	
-	protected Vector2 absoluteSize;
-	protected Vector2 absolutePosition;
+	protected Vector2int absoluteSize;
+	protected Vector2int absolutePosition;
 	
 	protected boolean showOutline;
 	protected Attributes attributes;
@@ -31,8 +31,8 @@ public class GuiBase {
 		this.name = "GuiObject";
 		this.parent = null;
 		
-		this.absoluteSize = new Vector2();
-		this.absolutePosition = new Vector2();
+		this.absoluteSize = new Vector2int();
+		this.absolutePosition = new Vector2int();
 		
 		this.showOutline = false;
 		this.attributes = new Attributes();
@@ -58,19 +58,19 @@ public class GuiBase {
 		return this.parent;
 	}
 	
-	public Vector2 getAbsoluteSize() {
+	public Vector2int getAbsoluteSize() {
 		return this.absoluteSize;
 	}
 
-	public void setAbsoluteSize(Vector2 absoluteSize) {
+	public void setAbsoluteSize(Vector2int absoluteSize) {
 		this.absoluteSize = absoluteSize;
 	}
 
-	public Vector2 getAbsolutePosition() {
+	public Vector2int getAbsolutePosition() {
 		return absolutePosition;
 	}
 
-	public void setAbsolutePosition(Vector2 absolutePosition) {
+	public void setAbsolutePosition(Vector2int absolutePosition) {
 		this.absolutePosition = absolutePosition;
 	}
 	

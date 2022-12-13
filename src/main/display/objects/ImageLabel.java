@@ -1,5 +1,6 @@
 package main.display.objects;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,10 +12,13 @@ import main.enumerations.ImageScaleType;
 public class ImageLabel extends GuiObject {
 
 	// Fields //
+	Image rawImage;
+	Image scaledImage;
+	
 	String imagePath;
-	BufferedImage bufferedImage;
 	ImageScaleType scaleType;
 	float imageTransparency;
+	int sizeHash;
 	
 	// Constructors //
 	public ImageLabel() {
@@ -24,23 +28,36 @@ public class ImageLabel extends GuiObject {
 	// Class Methods //
 	private void setDefault() {
 		this.name = "ImageLabel";
+		
+		this.rawImage = null;
+		this.scaledImage = null;
+		
 		this.imagePath = null;
-		this.bufferedImage = null;
 		this.scaleType = ImageScaleType.STRETCH;
 		this.imageTransparency = 0;
+		
+		this.sizeHash = -1;
 	}
 	
-	private void updateBufferedImg() {
-		this.bufferedImage = null;
+	private void loadImage() {
+		this.rawImage = null;
 		try {
 			File imgFile = new File(this.imagePath);
 			if (!imgFile.exists()) {
 				return;
 			}
-			this.bufferedImage = ImageIO.read(imgFile);
+			this.rawImage = ImageIO.read(imgFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public boolean hasSizeHashChanged(int newHashCode) {
+		return newHashCode != this.sizeHash;
+	}
+	
+	public void setSizeHash(int newHashCode) {
+		this.sizeHash = newHashCode;
 	}
 	
 	public String getImagePath() {
@@ -49,11 +66,19 @@ public class ImageLabel extends GuiObject {
 	
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
-		this.updateBufferedImg();
+		this.loadImage();
 	}
 	
-	public BufferedImage getBufferedImg() {
-		return this.bufferedImage;
+	public Image getRawImage() {
+		return this.rawImage;
+	}
+	
+	public void setScaledImage(Image scaled) {
+		this.scaledImage = scaled;
+	}
+	
+	public Image getScaledImage() {
+		return this.scaledImage;
 	}
 	
 	public ImageScaleType getImageScaleType() {

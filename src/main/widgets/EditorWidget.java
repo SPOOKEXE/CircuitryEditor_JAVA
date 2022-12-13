@@ -58,12 +58,14 @@ public class EditorWidget extends BaseWidget {
 		
 		ImageLabel testImage1 = new ImageLabel();
 		testImage1.setName("Test Image 1");
-		testImage1.setBackgroundColor3(Color3.fromRGB(255, 255, 48));
-		testImage1.setSize(new UDim2(0, 192*2, 0, 120*2));
+		testImage1.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
+//		testImage1.setSize(new UDim2(0, 192*2, 0, 120*2));
+		testImage1.setSize(new UDim2(0.1, 0, 0.1, 0));
 		testImage1.setPosition(new UDim2(0.45, 0, 0.45, 0));
 		testImage1.setZIndex(8);
 		testImage1.setBackgroundTransparency(0.5F);
-		testImage1.setImageScaleType(ImageScaleType.STRETCH);
+//		testImage1.setImageScaleType(ImageScaleType.STRETCH);
+		testImage1.setImageScaleType(ImageScaleType.FIT);
 		testImage1.setOutlineEnabled(true);
 		testImage1.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
 		testImage1.setImageTransparency(0.3F);

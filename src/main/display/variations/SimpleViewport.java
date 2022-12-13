@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import main.math.Vector2;
+import main.math.Vector2int;
 import main.display.Display;
 import main.display.IDisplay;
 
@@ -44,7 +44,7 @@ public class SimpleViewport extends Display implements IDisplay {
 	}
 	
 	@Override
-	public void setSize(Vector2 viewportSize) {
+	public void setSize(Vector2int viewportSize) {
 		super.setSize(viewportSize);
 	}
 

@@ -25,6 +25,11 @@ public class Vector2int {
 		this.x = this.y = 0;
 	}
 	
+	public Vector2int(Vector2 fVec2) {
+		this.x = (int) fVec2.x;
+		this.y = (int) fVec2.y;
+	}
+	
 	// Class Methods //
 	public Vector2int add( Vector2int other ) {
 		return new Vector2int(this.x + other.x, this.y + other.y);

@@ -2,9 +2,11 @@ package main.widgets;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -19,10 +21,11 @@ import main.display.objects.GuiBase;
 import main.display.objects.GuiObject;
 import main.display.objects.ImageLabel;
 import main.display.variations.SimpleViewport;
+import main.enumerations.DominantAxis;
 import main.enumerations.ImageScaleType;
 import main.enumerations.ZIndexSortType;
 import main.input.UserInput;
-import main.math.Vector2;
+import main.math.Vector2int;
 
 public class BaseWidget {
 
@@ -193,16 +196,16 @@ public class BaseWidget {
 		return this.started;
 	}
 	
-	public void setWindowSize(Vector2 size) {
+	public void setWindowSize(Vector2int size) {
 		this.baseCanvas.setSize(size);
 		this.baseGuiData.setAbsoluteSize(size);
 		for (GuiObject obj : this.renderObjects) {
-			obj.updateAbsoluteSize();
+			obj.updateAbsolutes();
 		}
 	}
 	
 	public void setWindowSize(int width, int height) {
-		this.setWindowSize(new Vector2(width, height));
+		this.setWindowSize(new Vector2int(width, height));
 	}
 	
 	public SimpleViewport getViewportCanvas() {
@@ -219,13 +222,14 @@ public class BaseWidget {
 		}
 		this.initialized = true;
 		
-		// init
-		this.baseCanvas.setSize( baseCanvas.getWindowSize() );
+		// initialize
+		setWindowSize( this.baseCanvas.getWindowSize() );
 		
 		BaseWidget edd = this;
 		this.getViewportCanvas().getFrame().getRootPane().addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
-				edd.setWindowSize( edd.getViewportCanvas().getWindowSize() );
+				Dimension windowSize = edd.getViewportCanvas().getFrame().getSize();
+				edd.setWindowSize( new Vector2int(windowSize.width, windowSize.height) );
             }
         });
 		
@@ -273,37 +277,74 @@ public class BaseWidget {
 		graphics2D.setComposite(alphaComposite);
 	}
 	
+	private static Image stretchImageToSize(Image img, int w , int h) {
+		BufferedImage resizedimage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+	    Graphics2D g2 = resizedimage.createGraphics();
+	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	    g2.drawImage(img, 0, 0,w,h,null);
+	    g2.dispose();
+	    return resizedimage;
+	}
+	
+	private static Image stretchImageToSize(Image img, Vector2int size) {
+		return BaseWidget.stretchImageToSize(img, size.x, size.y);
+	}
+	
+	private static Image scaleAndFitImage(Image img, int maxWidth, int maxHeight, DominantAxis dominantAxis) {
+		float aspectSize = 0F;
+		float aspectImage = 0F;
+		
+		if (dominantAxis == DominantAxis.Height) {
+			// if using height
+			aspectSize = (maxHeight / maxWidth);
+			aspectImage = img.getHeight(null) / img.getWidth(null);
+		} else {
+			// otherwise width
+			aspectSize = (maxWidth / maxHeight);
+			aspectImage = img.getWidth(null) / img.getHeight(null);
+		}
+		
+		float scaleNumber = Math.min(aspectSize, aspectImage);
+		if (scaleNumber <= 0) {
+			scaleNumber = 1F;
+		}
+		
+		System.out.println(scaleNumber);
+		float newWidth = (maxWidth * scaleNumber);
+		float newHeight = (maxHeight * scaleNumber);
+		
+		return img.getScaledInstance((int)newWidth, (int)newHeight, Image.SCALE_SMOOTH);
+	}
+	
+	private static Image scaleAndFitImage(Image img, Vector2int size, DominantAxis dominantAxis) {
+		return BaseWidget.scaleAndFitImage(img, size.x, size.y, dominantAxis);
+	}
+	
 	public void drawObjects(Graphics2D g2d) {
 		
 		g2d.translate(0, 30); // control bar
 		
 		for (GuiObject rObject : this.getAssortedRenders()) {
 			
-			Vector2 absPosition = rObject.getAbsolutePosition();
-			Vector2 absSize = rObject.getAbsoluteSize();
+			rObject.updateAbsolutes();
 			
+			// TODO: solve scale problem
+			// TODO: implement aspect ratios
 			// TODO: implement anchor point
 			// TODO: implement clip descendants
-			// TODO: implement aspect ratios
 			
-			// TODO: solve this problem, some reason doesn't auto update at start
-			rObject.updateAbsolutePosition();
-			rObject.updateAbsoluteSize();
-			// //
+			Vector2int absPosition = rObject.getAbsolutePosition();
+			Vector2int absSize = rObject.getAbsoluteSize();
+			int absSizeHash = absSize.hashCode();
 			
 			if (rObject.isOutlineEnabled()) {
 				g2d.setColor(new Color(255,255,255));
-				g2d.drawRect((int)absPosition.x, (int)absPosition.y, (int)absSize.x, (int)absSize.y);
+				g2d.drawRect(absPosition.x, absPosition.y, absSize.x, absSize.y);
 			}
 			
 			if (rObject instanceof ImageLabel) {
 				ImageLabel imgLabel = (ImageLabel) rObject;
 
-				Image drawImage = imgLabel.getBufferedImg();
-				if (drawImage == null) {
-					continue;
-				}
-				
 				float imageTransparency = imgLabel.getImageTransparency();
 				
 				// set transparency - https://zetcode.com/gfx/java2d/transparency/
@@ -311,26 +352,34 @@ public class BaseWidget {
 					BaseWidget.setImageTransparency(g2d, imageTransparency);
 				}
 				
-				// TODO: make images scale with image label properly
-				
 				ImageScaleType scaleType = imgLabel.getImageScaleType();
-				if (scaleType == ImageScaleType.STRETCH) {
-					// stretch image to fit object
-					Image scaled = drawImage.getScaledInstance((int)absSize.x, (int)absSize.y, 0);
-					g2d.drawImage(scaled, (int)(absPosition.x), (int)(absPosition.y), (int)absSize.x, (int)absSize.y, null);
-				}/* else if (scaleType == ImageScaleType.CROP) {
-					// TODO: ScaleType:CROP
-					// scale up to fit all dimensions
-					float scaleFactor = Math.min(drawImage.getWidth(null)/absSize.x, drawImage.getHeight(null)/absSize.x);
-					drawImage = drawImage.getScaledInstance((int)(absSize.x*scaleFactor), (int)(absSize.y*scaleFactor), 1);
-				} else if (scaleType == ImageScaleType.FIT) {
-					// TODO: ScaleType:FIT
-					// scale down to fit all dimensions
-					float scaleFactor = Math.max(drawImage.getWidth(null)/absSize.x, drawImage.getHeight(null)/absSize.x);
-					// scale up to fit all dimensions
-					drawImage = drawImage.getScaledInstance((int)(absSize.x*scaleFactor), (int)(absSize.y*scaleFactor), 1);
-				}*/
-
+				
+				if (imgLabel.hasSizeHashChanged(absSizeHash)) {
+					System.out.println("absolute size hash changed");
+					imgLabel.setSizeHash(absSizeHash);
+					
+					if (scaleType == ImageScaleType.STRETCH) {
+						System.out.println("restretch image");
+						imgLabel.setScaledImage( stretchImageToSize(imgLabel.getRawImage(), absSize) );
+					} else if (scaleType == ImageScaleType.FIT) {
+						// TODO: get ImageScaleType.FIT to work correctly
+						System.out.println("rescale image");
+						imgLabel.setScaledImage( scaleAndFitImage(imgLabel.getRawImage(), absSize, null) );
+					}
+					
+					/* else if (scaleType == ImageScaleType.CROP) {
+						// TODO: get ImageScaleType.CROP to work
+						// scale up to fit all dimensions
+						float scaleFactor = Math.min(drawImage.getWidth(null)/absSize.x, drawImage.getHeight(null)/absSize.x);
+						drawImage = drawImage.getScaledInstance((int)(absSize.x*scaleFactor), (int)(absSize.y*scaleFactor), 1);
+					} */
+					
+				}
+				
+				Image drawImage = imgLabel.getScaledImage();
+				if (drawImage != null) {
+					g2d.drawImage(drawImage, absPosition.x, absPosition.y, drawImage.getWidth(null), drawImage.getHeight(null), null);
+				}
 				
 				// reset transparency
 				if (imageTransparency != 0) {

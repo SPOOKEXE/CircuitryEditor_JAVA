@@ -3,6 +3,7 @@ package main.display.objects;
 import main.math.Color3;
 import main.math.UDim2;
 import main.math.Vector2;
+import main.math.Vector2int;
 
 public class GuiObject extends GuiBase {
 
@@ -58,39 +59,34 @@ public class GuiObject extends GuiBase {
 		return size;
 	}
 
-	public void updateAbsoluteSize() {
+	public void updateAbsolutes() {
+		UDim2 thisSizeUDim2 = this.size;
+		UDim2 thisPositionUDim2 = this.position;
+		
+		// no parent, use offset values
 		if (this.parent == null) {
-			UDim2 sizeUD2 = this.getSize();
-			this.setAbsoluteSize(new Vector2(sizeUD2.offset_x, sizeUD2.offset_y));
-		} else {
-			Vector2 prntAbsSize = this.parent.getAbsoluteSize();
-			UDim2 sizeUD2 = this.getSize();
-			this.setAbsoluteSize(new Vector2(
-				(prntAbsSize.x * sizeUD2.scale_x) + sizeUD2.offset_x,
-				(prntAbsSize.y * sizeUD2.scale_y) + sizeUD2.offset_y
-			));
+			this.setAbsolutePosition(new Vector2int(thisPositionUDim2.offset_x, thisPositionUDim2.offset_y));
+			this.setAbsoluteSize(new Vector2int(thisSizeUDim2.offset_x, thisSizeUDim2.offset_y));
+			return;
 		}
-	}
-
-	public void updateAbsolutePosition() {
-		if (this.parent == null) {
-			UDim2 posUD2 = this.getPosition();
-			this.setAbsolutePosition(new Vector2(posUD2.offset_x, posUD2.offset_y));
-		} else {
-			Vector2 prntAbsSize = this.parent.getAbsoluteSize();
-			Vector2 prntAbsPosition = this.parent.getAbsolutePosition();
-			UDim2 posUD2 = this.getPosition();
-			Vector2 translated = new Vector2(
-				prntAbsPosition.x + (prntAbsSize.x * posUD2.scale_x) + posUD2.offset_x,
-				prntAbsPosition.y + (prntAbsSize.y * posUD2.scale_y) + posUD2.offset_y
-			);
-			this.setAbsolutePosition(translated);
-		}
+		
+		// parent, use scale & offset
+		Vector2int parentPosition = this.parent.getAbsolutePosition();
+		Vector2int parentSize = this.parent.getAbsoluteSize();
+		
+		this.setAbsoluteSize(new Vector2int(
+			(parentSize.x * thisSizeUDim2.scale_x) + thisSizeUDim2.offset_x,
+			(parentSize.y * thisSizeUDim2.scale_y) + thisSizeUDim2.offset_y
+		));
+		
+		this.setAbsolutePosition(new Vector2int(
+			parentPosition.x + (parentSize.x * thisPositionUDim2.scale_x) + thisPositionUDim2.offset_x,
+			parentPosition.y + (parentSize.y * thisPositionUDim2.scale_y) + thisPositionUDim2.offset_y
+		));
 	}
 	
 	public void setSize(UDim2 size) {
 		this.size = size;
-		this.updateAbsoluteSize();
 	}
 
 	public UDim2 getPosition() {
@@ -99,7 +95,6 @@ public class GuiObject extends GuiBase {
 
 	public void setPosition(UDim2 position) {
 		this.position = position;
-		this.updateAbsolutePosition();
 	}
 	
 	public int getRotation() {
@@ -129,8 +124,7 @@ public class GuiObject extends GuiBase {
 	@Override
 	public void setParent(GuiBase parent) {
 		super.setParent(parent);
-		this.updateAbsoluteSize();
-		this.updateAbsolutePosition();
+		this.updateAbsolutes();
 	}
 	
 	@Override

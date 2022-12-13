@@ -6,13 +6,13 @@ import java.awt.Graphics2D;
 
 import javax.swing.JFrame;
 
-import main.math.Vector2;
+import main.math.Vector2int;
 
 public class Display implements IDisplay {
 
 	// Fields //
 	protected JFrame frame;
-	protected Vector2 displaySize;
+	protected Vector2int displaySize;
 	protected String type;
 	protected String title;
 	protected int FPS;
@@ -20,13 +20,13 @@ public class Display implements IDisplay {
 
 	// Constructors //
 	public Display() {
-		this.setSize(new Vector2(1280, 720));
+		this.setSize(new Vector2int(1280, 720));
 		this.setTitle("Display");
 		this.setVisible(true);
 		this.setupFrame();
 	}
 
-	public Display(Vector2 size) {
+	public Display(Vector2int size) {
 		this.setSize(size);
 		this.setTitle("Display");
 		this.setVisible(true);
@@ -46,7 +46,8 @@ public class Display implements IDisplay {
 	}
 	
 	@Override
-	public void setSize(Vector2 size) {
+	public void setSize(Vector2int size) {
+		System.out.println("New Vector2int size - x:" + size.x + " y:" + size.y);
 		this.displaySize = size;
 		if (this.frame != null) {
 			Dimension dimSize = new Dimension((int) size.x, (int) size.y);
@@ -107,9 +108,9 @@ public class Display implements IDisplay {
 	}
 
 	@Override
-	public Vector2 getWindowSize() {
+	public Vector2int getWindowSize() {
 		Dimension wdSize = this.frame.getSize();
-		return new Vector2( wdSize.width, wdSize.height );
+		return new Vector2int( wdSize.width, wdSize.height );
 	}
 
 	@Override
