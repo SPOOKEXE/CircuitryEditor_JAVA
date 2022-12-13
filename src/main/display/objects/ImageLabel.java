@@ -1,7 +1,6 @@
 package main.display.objects;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,7 +17,7 @@ public class ImageLabel extends GuiObject {
 	String imagePath;
 	ImageScaleType scaleType;
 	float imageTransparency;
-	int sizeHash;
+	int absHashCode = -1;
 	
 	// Constructors //
 	public ImageLabel() {
@@ -35,8 +34,6 @@ public class ImageLabel extends GuiObject {
 		this.imagePath = null;
 		this.scaleType = ImageScaleType.STRETCH;
 		this.imageTransparency = 0;
-		
-		this.sizeHash = -1;
 	}
 	
 	private void loadImage() {
@@ -50,14 +47,6 @@ public class ImageLabel extends GuiObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public boolean hasSizeHashChanged(int newHashCode) {
-		return newHashCode != this.sizeHash;
-	}
-	
-	public void setSizeHash(int newHashCode) {
-		this.sizeHash = newHashCode;
 	}
 	
 	public String getImagePath() {
@@ -79,6 +68,14 @@ public class ImageLabel extends GuiObject {
 	
 	public Image getScaledImage() {
 		return this.scaledImage;
+	}
+	
+	public boolean hasSizeHashChanged(int hash) {
+		return this.absHashCode != hash;
+	}
+	
+	public void setSizeHash(int hash) {
+		this.absHashCode = hash;
 	}
 	
 	public ImageScaleType getImageScaleType() {

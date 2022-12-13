@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import main.Main;
 import main.display.objects.GuiBase;
 import main.display.objects.GuiObject;
 import main.display.objects.ImageLabel;
@@ -230,6 +231,7 @@ public class BaseWidget {
 			public void componentResized(ComponentEvent e) {
 				Dimension windowSize = edd.getViewportCanvas().getFrame().getSize();
 				edd.setWindowSize( new Vector2int(windowSize.width, windowSize.height) );
+				edd.Draw();
             }
         });
 		
@@ -290,34 +292,48 @@ public class BaseWidget {
 		return BaseWidget.stretchImageToSize(img, size.x, size.y);
 	}
 	
-	private static Image scaleAndFitImage(Image img, int maxWidth, int maxHeight, DominantAxis dominantAxis) {
-		float aspectSize = 0F;
-		float aspectImage = 0F;
+	private static Image scaleAndFitImage(Image img, int maxWidth, int maxHeight, boolean useMinimumScale) {
+		float imgWidth = img.getWidth(null);
+		float imgHeight = img.getHeight(null);
 		
-		if (dominantAxis == DominantAxis.Height) {
-			// if using height
-			aspectSize = (maxHeight / maxWidth);
-			aspectImage = img.getHeight(null) / img.getWidth(null);
+		float transformScaleX = 1;
+		if (imgWidth > maxWidth) {
+			transformScaleX = maxWidth / imgWidth;
+		} else if (imgWidth < maxWidth) {
+			transformScaleX = imgWidth / maxWidth;
+		}
+		
+		float transformScaleY = 1;
+		if (imgHeight > maxHeight) {
+			transformScaleY = maxHeight / imgHeight;
+		} else if (imgHeight < maxHeight) {
+			transformScaleY = imgHeight / maxHeight;
+		}
+		
+//		System.out.println(imgWidth + " - " + imgHeight);
+//		System.out.println(maxWidth + " - " + maxHeight);
+//		System.out.println(maxWidth / imgWidth + " - " + imgWidth / maxWidth);
+//		System.out.println(maxHeight / imgHeight + " - " + imgHeight / maxHeight);
+//		System.out.println(transformScaleX + " - " + transformScaleY);
+		
+		float scale = 1; // potentially return this for position scale
+		if (useMinimumScale) {
+			scale = Math.min(transformScaleX, transformScaleY);
 		} else {
-			// otherwise width
-			aspectSize = (maxWidth / maxHeight);
-			aspectImage = img.getWidth(null) / img.getHeight(null);
+			scale = Math.max(transformScaleX, transformScaleY);
 		}
 		
-		float scaleNumber = Math.min(aspectSize, aspectImage);
-		if (scaleNumber <= 0) {
-			scaleNumber = 1F;
+		int scaledWidth = (int) (imgWidth * scale);
+		int scaledHeight = (int) (imgHeight * scale);
+		if (scaledWidth < 0 || scaledHeight < 0) {
+			return null;
 		}
 		
-		System.out.println(scaleNumber);
-		float newWidth = (maxWidth * scaleNumber);
-		float newHeight = (maxHeight * scaleNumber);
-		
-		return img.getScaledInstance((int)newWidth, (int)newHeight, Image.SCALE_SMOOTH);
+		return img.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
 	}
 	
-	private static Image scaleAndFitImage(Image img, Vector2int size, DominantAxis dominantAxis) {
-		return BaseWidget.scaleAndFitImage(img, size.x, size.y, dominantAxis);
+	private static Image scaleAndFitImage(Image img, Vector2int size, boolean useMinimumScale) {
+		return BaseWidget.scaleAndFitImage(img, size.x, size.y, useMinimumScale);
 	}
 	
 	public void drawObjects(Graphics2D g2d) {
@@ -328,14 +344,13 @@ public class BaseWidget {
 			
 			rObject.updateAbsolutes();
 			
-			// TODO: solve scale problem
 			// TODO: implement aspect ratios
 			// TODO: implement anchor point
-			// TODO: implement clip descendants
+			// TODO: implement clip descendants + image clipping
 			
 			Vector2int absPosition = rObject.getAbsolutePosition();
 			Vector2int absSize = rObject.getAbsoluteSize();
-			int absSizeHash = absSize.hashCode();
+			int absSizeHash = (absSize.x + "_" + absSize.y).hashCode();
 			
 			if (rObject.isOutlineEnabled()) {
 				g2d.setColor(new Color(255,255,255));
@@ -355,29 +370,30 @@ public class BaseWidget {
 				ImageScaleType scaleType = imgLabel.getImageScaleType();
 				
 				if (imgLabel.hasSizeHashChanged(absSizeHash)) {
-					System.out.println("absolute size hash changed");
 					imgLabel.setSizeHash(absSizeHash);
 					
-					if (scaleType == ImageScaleType.STRETCH) {
-						System.out.println("restretch image");
-						imgLabel.setScaledImage( stretchImageToSize(imgLabel.getRawImage(), absSize) );
-					} else if (scaleType == ImageScaleType.FIT) {
-						// TODO: get ImageScaleType.FIT to work correctly
-						System.out.println("rescale image");
-						imgLabel.setScaledImage( scaleAndFitImage(imgLabel.getRawImage(), absSize, null) );
+					Image scaled = null;
+					
+					switch (scaleType) {
+						case STRETCH:
+							scaled = stretchImageToSize(imgLabel.getRawImage(), absSize);
+							break;
+						case FIT:
+							scaled = scaleAndFitImage(imgLabel.getRawImage(), absSize, true);
+							break;
+						case CROP:
+							scaled = scaleAndFitImage(imgLabel.getRawImage(), absSize, false);
+							break;
+						default:
+							System.out.println("Unsupported ImageScaleType Enum: " + scaleType);
 					}
 					
-					/* else if (scaleType == ImageScaleType.CROP) {
-						// TODO: get ImageScaleType.CROP to work
-						// scale up to fit all dimensions
-						float scaleFactor = Math.min(drawImage.getWidth(null)/absSize.x, drawImage.getHeight(null)/absSize.x);
-						drawImage = drawImage.getScaledInstance((int)(absSize.x*scaleFactor), (int)(absSize.y*scaleFactor), 1);
-					} */
-					
+					imgLabel.setScaledImage( scaled );
 				}
 				
 				Image drawImage = imgLabel.getScaledImage();
 				if (drawImage != null) {
+					// TODO: get the scaled image to position in the top-middle of the frame (or have an anchor point for it)
 					g2d.drawImage(drawImage, absPosition.x, absPosition.y, drawImage.getWidth(null), drawImage.getHeight(null), null);
 				}
 				

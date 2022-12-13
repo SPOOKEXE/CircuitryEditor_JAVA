@@ -65,7 +65,7 @@ public class EditorWidget extends BaseWidget {
 		testImage1.setZIndex(8);
 		testImage1.setBackgroundTransparency(0.5F);
 //		testImage1.setImageScaleType(ImageScaleType.STRETCH);
-		testImage1.setImageScaleType(ImageScaleType.FIT);
+		testImage1.setImageScaleType(ImageScaleType.CROP);
 		testImage1.setOutlineEnabled(true);
 		testImage1.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
 		testImage1.setImageTransparency(0.3F);

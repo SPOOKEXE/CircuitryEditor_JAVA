@@ -43,11 +43,11 @@ public class Display implements IDisplay {
 		this.frame.setLocationRelativeTo(null); // Center to the middle of the screen
 		//this.frame.setResizable(false); // Disallow resizing
 		this.frame.setVisible(this.visible); // Make it visible
+		
 	}
 	
 	@Override
 	public void setSize(Vector2int size) {
-		System.out.println("New Vector2int size - x:" + size.x + " y:" + size.y);
 		this.displaySize = size;
 		if (this.frame != null) {
 			Dimension dimSize = new Dimension((int) size.x, (int) size.y);

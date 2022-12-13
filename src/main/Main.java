@@ -45,7 +45,12 @@ public class Main {
 		// Initialize and start all widgets //
 		Main.initializeAndStartAll();
 		
-		// Update the widgets and draw //
+		// Immediately update and draw once //
+		Main.update();
+		Main.draw();
+		
+		// Update the widgets and draw continuously //
+		// TODO: change to FPS-based not timer-based
 		while (true) {
 			Main.update();
 			Main.draw();
