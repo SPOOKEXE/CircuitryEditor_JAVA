@@ -1,6 +1,5 @@
 package main.display;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -124,6 +123,20 @@ public class Display implements IDisplay {
 	}
 	
 	@Override
+	public Graphics getJFrameGraphics() {
+		return this.frame.getGraphics();
+	}
+	
+	@Override
+	public Graphics2D getJFrameGraphics2D() {
+		Graphics g = this.getJFrameGraphics();
+		if (g != null) {
+			return (Graphics2D) g;
+		}
+		return null;
+	}
+	
+	@Override
 	public void init() {
 		this.frame.setTitle(this.title + " | " + this.FPS + " fps");
 	}
@@ -131,19 +144,6 @@ public class Display implements IDisplay {
 	@Override
 	public void update() {
 		this.frame.setTitle(this.title + " | " + this.FPS + " fps");
-	}
-	
-	@Override
-	public Graphics getGraphics() {
-		return this.frame.getGraphics();
-	}
-	
-	public Graphics2D getGraphics2D() {
-		Graphics g = this.getGraphics();
-		if (g != null) {
-			return (Graphics2D) g;
-		}
-		return null;
 	}
 	
 	@Override

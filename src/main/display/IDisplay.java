@@ -1,6 +1,7 @@
 package main.display;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JFrame;
 
@@ -25,6 +26,6 @@ public interface IDisplay {
 	boolean isVisible( );
 	boolean isResizable();
 	String toString( );
-	Graphics getGraphics();
-	Graphics2D getGraphics2D();
+	Graphics getJFrameGraphics();
+	Graphics2D getJFrameGraphics2D();
 }

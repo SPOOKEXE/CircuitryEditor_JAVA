@@ -273,10 +273,9 @@ public class BaseWidget {
 		graphics2D.setComposite(alphaComposite);
 	}
 	
-	public void drawObjects(Graphics bGraphics) {
+	public void drawObjects(Graphics2D g2d) {
 		
-		Graphics2D graphics2D = (Graphics2D) bGraphics;
-		graphics2D.translate(0, 30);
+		g2d.translate(0, 30);
 		
 		for (GuiObject rObject : this.getAssortedRenders()) {
 			
@@ -292,8 +291,8 @@ public class BaseWidget {
 			// //
 			
 			if (rObject.isOutlineEnabled()) {
-				graphics2D.setColor(new Color(255,255,255));
-				graphics2D.drawRect((int)absPosition.x, (int)absPosition.y, (int)absSize.x, (int)absSize.y);
+				g2d.setColor(new Color(255,255,255));
+				g2d.drawRect((int)absPosition.x, (int)absPosition.y, (int)absSize.x, (int)absSize.y);
 			}
 			
 			if (rObject instanceof ImageLabel) {
@@ -308,13 +307,13 @@ public class BaseWidget {
 				
 				// set transparency - https://zetcode.com/gfx/java2d/transparency/
 				if (imageTransparency != 0) {
-					BaseWidget.setImageTransparency(graphics2D, imageTransparency);
+					BaseWidget.setImageTransparency(g2d, imageTransparency);
 				}
 				
 				ImageScaleType scaleType = imgLabel.getImageScaleType();
 				if (scaleType == ImageScaleType.STRETCH) {
 					// stretch image to fit object
-					graphics2D.drawImage(drawImage, (int)(absPosition.x), (int)(absPosition.y), (int)absSize.x, (int)absSize.y, null);
+					g2d.drawImage(drawImage, (int)(absPosition.x), (int)(absPosition.y), (int)absSize.x, (int)absSize.y, null);
 				}/* else if (scaleType == ImageScaleType.CROP) {
 					// TODO: ScaleType:CROP
 					// scale up to fit all dimensions
@@ -331,7 +330,7 @@ public class BaseWidget {
 				
 				// reset transparency
 				if (imageTransparency != 0) {
-					BaseWidget.setImageTransparency(graphics2D, 0);
+					BaseWidget.setImageTransparency(g2d, 0);
 				}
 				
 			} else {
@@ -340,14 +339,14 @@ public class BaseWidget {
 				float backgroundTransparency = rObject.getBackgroundTransparency();
 				
 				if (backgroundTransparency != 0) {
-					BaseWidget.setBackgroundTransparency(graphics2D, backgroundTransparency);
+					BaseWidget.setBackgroundTransparency(g2d, backgroundTransparency);
 				}
 				
-				graphics2D.setColor(new Color(RGB[0], RGB[1], RGB[2]));
-				graphics2D.fillRect( (int)absPosition.x, (int)absPosition.y, (int)absSize.x, (int)absSize.y);
+				g2d.setColor(new Color(RGB[0], RGB[1], RGB[2]));
+				g2d.fillRect( (int)absPosition.x, (int)absPosition.y, (int)absSize.x, (int)absSize.y);
 				
 				if (backgroundTransparency != 0) {
-					BaseWidget.setBackgroundTransparency(graphics2D, 0);
+					BaseWidget.setBackgroundTransparency(g2d, 0);
 				}
 				
 			}
@@ -362,29 +361,29 @@ public class BaseWidget {
 			return;
 		}
 
-		Graphics g = this.baseCanvas.getGraphics();
+		
+		// draw current buffered image
+		BufferedImage currentImage = this.baseCanvas.getBufferedImage();
+		
+		Graphics2D frame_g2d = this.baseCanvas.getJFrameGraphics2D();
+		if (frame_g2d != null && currentImage != null) {
+			frame_g2d.drawImage(currentImage, 0, 0, this.baseCanvas.getFrame());
+		}
+		
+		// create next buffered image
+		BufferedImage nextImage = this.baseCanvas.blankImage();
+		
+		Graphics g = nextImage.getGraphics();
 		if (g == null) {
 			return;
 		}
-		
 		Graphics2D g2d = (Graphics2D) g;
-		this.baseCanvas.preRender(g2d);
+		
+		// draw GUI objects on top of next buffered image
+		this.drawObjects(g2d);
 
-		// if there is no blank canvas, return
-		BufferedImage blankCanvas = this.baseCanvas.getBufferedImage();
-		if (blankCanvas == null) {
-			return;
-		}
-
-		// clear canvas
-		Graphics bGraphics = blankCanvas.getGraphics();
-		bGraphics.setColor(Color.BLACK);
-
-		// draw gui objects ontop
-		this.drawObjects(bGraphics);
-
-		// final update
-		this.baseCanvas.postRender(g);
+		// set currentBuffered as the new image
+		this.baseCanvas.setBufferedImage(nextImage);
 		
 	}
 	

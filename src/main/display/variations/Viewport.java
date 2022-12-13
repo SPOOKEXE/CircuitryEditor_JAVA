@@ -1,8 +1,5 @@
 package main.display.variations;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -36,11 +33,6 @@ public class Viewport extends Display implements IDisplay {
 	@Override
 	public void update() {
 		super.update();
-		
-		Graphics2D g2d = this.getGraphics2D();
-		if (g2d != null && this.currentBuffered != null) {
-			g2d.drawImage(this.currentBuffered, 0, 0, this.getFrame());
-		}
 	}
 	
 	public BufferedImage getBufferedImage() {

@@ -34,7 +34,7 @@ public class OSJSON {
 	}
 	
 	public static JSONObject getJSON( String filepath ) {
-		return getJSON( filepath, false );
+		return OSJSON.getJSON( filepath, false );
 	}
 	
 	public static JSONObject getJSON( String filepath, Boolean createIfMissing ) {

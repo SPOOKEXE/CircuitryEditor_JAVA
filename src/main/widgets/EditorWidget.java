@@ -1,11 +1,5 @@
 package main.widgets;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,7 +9,6 @@ import main.display.objects.ImageLabel;
 import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
-import main.math.Vector2;
 
 public class EditorWidget extends BaseWidget {
 
@@ -93,7 +86,7 @@ public class EditorWidget extends BaseWidget {
 			return false;
 		}
 
-		// on-init stuff
+		// on initialize
 		this.setWindowTitle("Circuitry Editor Widget");
 
 		return true;
