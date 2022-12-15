@@ -1,8 +1,8 @@
 package sort.aspectratio;
 
-import main.display.objects.GuiBase;
 import main.enumerations.DominantAxis;
 import main.math.Vector2int;
+import main.widgets.objects.GuiBase;
 
 public class AspectRatioConstraint {
 

@@ -1,32 +1,25 @@
 package main.widgets;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
-import main.Main;
-import main.display.objects.GuiBase;
-import main.display.objects.GuiObject;
-import main.display.objects.ImageLabel;
 import main.display.variations.SimpleViewport;
-import main.enumerations.DominantAxis;
 import main.enumerations.ImageScaleType;
 import main.enumerations.ZIndexSortType;
 import main.input.UserInput;
 import main.math.Vector2int;
+import main.utility.GraphicUtility;
+import main.widgets.managers.GuiObjectManager;
+import main.widgets.objects.GuiBase;
+import main.widgets.objects.GuiObject;
+import main.widgets.objects.ImageLabel;
 
 public class BaseWidget {
 
@@ -36,10 +29,7 @@ public class BaseWidget {
 	protected SimpleViewport baseCanvas;
 	protected GuiBase baseGuiData;
 	protected UserInput userInput;
-	protected ArrayList<GuiObject> renderObjects;
-	protected ArrayList<GuiObject> assortedRenderObjects;
-	
-	protected ZIndexSortType zIndexSortType;
+	protected GuiObjectManager guiObjectManager;
 	
 	// Constructors //
 	public BaseWidget() {
@@ -48,141 +38,35 @@ public class BaseWidget {
 		this.baseGuiData = new GuiBase();
 		this.baseCanvas = new SimpleViewport();
 		this.userInput = new UserInput();
-		this.renderObjects = new ArrayList<GuiObject>();
-		this.assortedRenderObjects = null;
-		this.zIndexSortType = ZIndexSortType.Global;
+		this.guiObjectManager = new GuiObjectManager(ZIndexSortType.Global);
 	}
 	
 	// Class Methods //
-	private void updateAssortedRenders() {
-		// SORTING ALGORITHM (SORT BY PARENT STRUCTURE, SORT BY ZINDEX)
-	
-		// * Firstly, we want to separate all parent/children hierarchies into their own HashMap.
-		// * For every child under X parent, place them in an ArrayList given their zIndex as the HashMap Key.
-		// * 
-		// * Once all children have been places into this data structure;
-		// * HashMap<GuiObject, HashMap<Integer, ArrayList<GuiObject>>>
-		// * 
-		// * We create a new ArrayList of GuiObjects that ascends in zIndexes (zIndex = 1, zIndex = 3, zIndex = 4, etc..) 
-		// *
-		// * After that, we sort those ArrayLists based on hierarchy, highest ancestors being first.
-		// * 
-		// * We then display all GuiObjects in that order since they are zIndex sorted, and heirarchically sorted.
-
-		this.assortedRenderObjects = new ArrayList<GuiObject>();
-		
-		HashMap<GuiBase, HashMap<Integer, ArrayList<GuiObject>>> sortedParentZIndexBuffer = new HashMap<GuiBase, HashMap<Integer, ArrayList<GuiObject>>>();
-		
-		for (GuiObject object : this.renderObjects) {
-			// if parent to nil or its ancestor is not a GuiBase, skip it
-			if (object.isDescendantOf(null) || (!(object.getParent() instanceof GuiBase))) {
-				continue;
-			}
-			 
-			GuiBase objParent = object.getParent();
-			
-			// if there is no zIndex sorted HashMap, create it
-			HashMap<Integer, ArrayList<GuiObject>> sortedChildren = sortedParentZIndexBuffer.get(objParent);
-			if (sortedChildren == null) {
-				sortedChildren = new HashMap<Integer, ArrayList<GuiObject>>();
-				sortedParentZIndexBuffer.put(objParent, sortedChildren);
-			}
-			
-			// if there is no array list for the zIndex HashMap, create it
-			ArrayList<GuiObject> sortedZIndexes = sortedChildren.get( object.getZIndex() );
-			if (sortedZIndexes == null) {
-				sortedZIndexes = new ArrayList<GuiObject>();
-				sortedChildren.put(object.getZIndex(), sortedZIndexes);
-			}
-			
-			// add to ArrayList
-			sortedZIndexes.add(object);
-		}
-		
-		// "ArrayList of GuiObjects that ascends in zIndexes"
-		// Convert to HashMap<GuiObject, ArrayList<GuiObject>> of sorted zIndex childrens given a parent GuiObject.
-		HashMap<GuiBase, ArrayList<GuiObject>> sortedzIndexChildren = new HashMap<GuiBase, ArrayList<GuiObject>>();
-		for (GuiBase ancestor : sortedParentZIndexBuffer.keySet()) {
-			// https://www.geeksforgeeks.org/sorting-hashmap-according-key-value-java/
-			TreeMap<Integer, ArrayList<GuiObject>> sorted = new TreeMap<Integer, ArrayList<GuiObject>>();
-			sorted.putAll(sortedParentZIndexBuffer.get(ancestor));
-			for (Map.Entry<Integer, ArrayList<GuiObject>> entry : sorted.entrySet()) {
-				if ( sortedzIndexChildren.get(ancestor) == null ) {
-					sortedzIndexChildren.put(ancestor, new ArrayList<GuiObject>());
-				}
-				sortedzIndexChildren.get(ancestor).addAll( entry.getValue() );
-			}
-		}
-		
-		// if sibling, relation to parent matters (so sort parents based on zIndex and heirarchical
-		if (this.zIndexSortType == ZIndexSortType.Sibling) {
-			
-			// clear memory for the zIndexBuffer HashMap
-			sortedParentZIndexBuffer = null;
-			
-			// TODO: Hierarchical sorting
-			System.out.println("Hierarchical sorting is not implemented!");
-			
-			// clear memory for the sortedzIndexChildren
-			sortedzIndexChildren = null;
-			
-			// add to assortedRenderObjects
-			
-			// clear memory for the hierarchical sorting
-			
-		} else {
-			
-			// shared zindex across the board
-			for (Entry<GuiBase, ArrayList<GuiObject>> tempSorted : sortedzIndexChildren.entrySet()) {
-				this.assortedRenderObjects.addAll(tempSorted.getValue());
-			}
-			
-		}
-	}
-	
-	
-	public ArrayList<GuiObject> getAssortedRenders() {
-		if (this.assortedRenderObjects == null) {
-			this.updateAssortedRenders();
-			// this.assortedRenderObjects = this.renderObjects;
-		}
-		
-		return this.assortedRenderObjects;
+	public ArrayList<GuiObject> getSortedRenders() {
+		return this.guiObjectManager.getSorted();
 	}
 	
 	public void setZIndexSortType(ZIndexSortType sortType) {
-		if (this.zIndexSortType != sortType) {
-			this.assortedRenderObjects = null;
+		if (this.guiObjectManager.getzIndexSortType() != sortType) {
+			this.guiObjectManager.clearSorted();
 		}
-		this.zIndexSortType = sortType;
+		this.guiObjectManager.setzIndexSortType(sortType);
 	}
 	
 	public void appendGuiObjects(GuiObject...guiObjects) {
-		this.renderObjects.addAll( Arrays.asList(guiObjects) );
-		this.assortedRenderObjects = null;
+		this.guiObjectManager.appendGuiObjects(guiObjects);
 	}
 	
 	public void appendGuiObjects(ArrayList<GuiObject> guiObjects) {
-		this.renderObjects.addAll(guiObjects);
-		this.assortedRenderObjects = null;
+		this.guiObjectManager.appendGuiObjects(guiObjects);
 	}
-	
-	public void removeGuiObject(GuiObject object) {
-		if (this.renderObjects.remove(object)) {
-			this.assortedRenderObjects = null;
-		}
-	}
-	
+
 	public void removeGuiObjects(GuiObject...guiObjects) {
-		if (this.renderObjects.removeAll( Arrays.asList(guiObjects) )) {
-			this.assortedRenderObjects = null;
-		}
+		this.guiObjectManager.removeGuiObjects(guiObjects);
 	}
 	
 	public void removeGuiObjects(ArrayList<GuiObject> guiObjects) {
-		if (this.renderObjects.removeAll( guiObjects )) {
-			this.assortedRenderObjects = null;
-		}
+		this.guiObjectManager.removeGuiObjects(guiObjects);
 	}
 	
 	public void setWindowTitle(String title) {
@@ -200,7 +84,7 @@ public class BaseWidget {
 	public void setWindowSize(Vector2int size) {
 		this.baseCanvas.setSize(size);
 		this.baseGuiData.setAbsoluteSize(size);
-		for (GuiObject obj : this.renderObjects) {
+		for (GuiObject obj : this.guiObjectManager.getUnsorted()) {
 			obj.updateAbsolutes();
 		}
 	}
@@ -269,84 +153,19 @@ public class BaseWidget {
 		// on-update
 	}
 	
-	private static void setBackgroundTransparency(Graphics2D graphics2D, float transparency) {
-		AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1-transparency);
-		graphics2D.setComposite(alphaComposite);
-	}
-	
-	private static void setImageTransparency(Graphics2D graphics2D, float transparency) {
-		AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1-transparency);
-		graphics2D.setComposite(alphaComposite);
-	}
-	
-	private static Image stretchImageToSize(Image img, int w , int h) {
-		BufferedImage resizedimage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
-	    Graphics2D g2 = resizedimage.createGraphics();
-	    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-	    g2.drawImage(img, 0, 0,w,h,null);
-	    g2.dispose();
-	    return resizedimage;
-	}
-	
-	private static Image stretchImageToSize(Image img, Vector2int size) {
-		return BaseWidget.stretchImageToSize(img, size.x, size.y);
-	}
-	
-	private static Image scaleAndFitImage(Image img, int maxWidth, int maxHeight, boolean useMinimumScale) {
-		float imgWidth = img.getWidth(null);
-		float imgHeight = img.getHeight(null);
-		
-		float transformScaleX = 1;
-		if (imgWidth > maxWidth) {
-			transformScaleX = maxWidth / imgWidth;
-		} else if (imgWidth < maxWidth) {
-			transformScaleX = imgWidth / maxWidth;
-		}
-		
-		float transformScaleY = 1;
-		if (imgHeight > maxHeight) {
-			transformScaleY = maxHeight / imgHeight;
-		} else if (imgHeight < maxHeight) {
-			transformScaleY = imgHeight / maxHeight;
-		}
-		
-//		System.out.println(imgWidth + " - " + imgHeight);
-//		System.out.println(maxWidth + " - " + maxHeight);
-//		System.out.println(maxWidth / imgWidth + " - " + imgWidth / maxWidth);
-//		System.out.println(maxHeight / imgHeight + " - " + imgHeight / maxHeight);
-//		System.out.println(transformScaleX + " - " + transformScaleY);
-		
-		float scale = 1; // potentially return this for position scale
-		if (useMinimumScale) {
-			scale = Math.min(transformScaleX, transformScaleY);
-		} else {
-			scale = Math.max(transformScaleX, transformScaleY);
-		}
-		
-		int scaledWidth = (int) (imgWidth * scale);
-		int scaledHeight = (int) (imgHeight * scale);
-		if (scaledWidth < 0 || scaledHeight < 0) {
-			return null;
-		}
-		
-		return img.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
-	}
-	
-	private static Image scaleAndFitImage(Image img, Vector2int size, boolean useMinimumScale) {
-		return BaseWidget.scaleAndFitImage(img, size.x, size.y, useMinimumScale);
-	}
-	
 	public void drawObjects(Graphics2D g2d) {
 		
 		g2d.translate(0, 30); // control bar
 		
-		for (GuiObject rObject : this.getAssortedRenders()) {
+		for (GuiObject rObject : this.guiObjectManager.getSorted()) {
 			
 			rObject.updateAbsolutes();
 			
 			// TODO: implement aspect ratios
 			// TODO: implement anchor point
 			// TODO: implement clip descendants + image clipping
+			// TODO: implement parent-zIndex GuiObject sorting part (ZIndexSortType.Sibling)
+			// TODO: implement 'ui-padding'
 			
 			Vector2int absPosition = rObject.getAbsolutePosition();
 			Vector2int absSize = rObject.getAbsoluteSize();
@@ -364,7 +183,7 @@ public class BaseWidget {
 				
 				// set transparency - https://zetcode.com/gfx/java2d/transparency/
 				if (imageTransparency != 0) {
-					BaseWidget.setImageTransparency(g2d, imageTransparency);
+					GraphicUtility.SetImageTransparency(g2d, imageTransparency);
 				}
 				
 				ImageScaleType scaleType = imgLabel.getImageScaleType();
@@ -376,13 +195,13 @@ public class BaseWidget {
 					
 					switch (scaleType) {
 						case STRETCH:
-							scaled = stretchImageToSize(imgLabel.getRawImage(), absSize);
+							scaled = GraphicUtility.StretchImageToSize(imgLabel.getRawImage(), absSize);
 							break;
 						case FIT:
-							scaled = scaleAndFitImage(imgLabel.getRawImage(), absSize, true);
+							scaled = GraphicUtility.ScaleAndFitImage(imgLabel.getRawImage(), absSize, true);
 							break;
 						case CROP:
-							scaled = scaleAndFitImage(imgLabel.getRawImage(), absSize, false);
+							scaled = GraphicUtility.ScaleAndFitImage(imgLabel.getRawImage(), absSize, false);
 							break;
 						default:
 							System.out.println("Unsupported ImageScaleType Enum: " + scaleType);
@@ -399,7 +218,7 @@ public class BaseWidget {
 				
 				// reset transparency
 				if (imageTransparency != 0) {
-					BaseWidget.setImageTransparency(g2d, 0);
+					GraphicUtility.SetImageTransparency(g2d, 0);
 				}
 				
 			} else {
@@ -408,14 +227,14 @@ public class BaseWidget {
 				float backgroundTransparency = rObject.getBackgroundTransparency();
 				
 				if (backgroundTransparency != 0) {
-					BaseWidget.setBackgroundTransparency(g2d, backgroundTransparency);
+					GraphicUtility.SetBackgroundTransparency(g2d, backgroundTransparency);
 				}
 				
 				g2d.setColor(new Color(RGB[0], RGB[1], RGB[2]));
 				g2d.fillRect( (int)absPosition.x, (int)absPosition.y, (int)absSize.x, (int)absSize.y);
 				
 				if (backgroundTransparency != 0) {
-					BaseWidget.setBackgroundTransparency(g2d, 0);
+					GraphicUtility.SetBackgroundTransparency(g2d, 0);
 				}
 				
 			}

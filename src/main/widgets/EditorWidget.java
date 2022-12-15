@@ -1,10 +1,13 @@
 package main.widgets;
 
-import main.display.objects.Frame;
-import main.display.objects.ImageLabel;
+import java.util.HashMap;
+
 import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
+import main.signal.SignalListener;
+import main.widgets.objects.Frame;
+import main.widgets.objects.ImageLabel;
 
 public class EditorWidget extends BaseWidget {
 
@@ -65,11 +68,27 @@ public class EditorWidget extends BaseWidget {
 		testImage1.setZIndex(8);
 		testImage1.setBackgroundTransparency(0.5F);
 //		testImage1.setImageScaleType(ImageScaleType.STRETCH);
-		testImage1.setImageScaleType(ImageScaleType.CROP);
+		testImage1.setImageScaleType(ImageScaleType.FIT);
 		testImage1.setOutlineEnabled(true);
 		testImage1.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
 		testImage1.setImageTransparency(0.3F);
 		testImage1.setParent(this.baseGuiData);
+		
+		testImage1.onMouseEnter(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("Mouse has entered the test image frame!");
+				System.out.println(args);
+			}
+		});
+		
+		testImage1.onMouseLeave(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("Mouse has left the test image frame!");
+				System.out.println(args);
+			}
+		});
 		
 		this.appendGuiObjects(testImage1);
 	}

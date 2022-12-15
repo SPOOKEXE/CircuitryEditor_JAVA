@@ -1,9 +1,11 @@
-package main.display.objects;
+package main.widgets.objects;
 
 import main.math.Color3;
 import main.math.UDim2;
 import main.math.Vector2;
 import main.math.Vector2int;
+import main.signal.SignalListener;
+import main.widgets.events.GuiEvents;
 
 public class GuiObject extends GuiBase {
 

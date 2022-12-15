@@ -1,4 +1,4 @@
-package main.display.objects;
+package main.widgets.objects;
 
 import java.awt.Image;
 import java.io.File;
@@ -7,6 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.enumerations.ImageScaleType;
+import main.signal.SignalListener;
 
 public class ImageLabel extends GuiObject {
 

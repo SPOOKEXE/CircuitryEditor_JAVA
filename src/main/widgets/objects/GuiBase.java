@@ -1,11 +1,12 @@
-package main.display.objects;
+package main.widgets.objects;
 
 import java.util.UUID;
 
 import main.data.Attributes;
 import main.math.Vector2int;
+import main.widgets.events.GuiEvents;
 
-public class GuiBase {
+public class GuiBase extends GuiEvents {
 
 	// Fields //
 	protected String uid;

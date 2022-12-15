@@ -1,4 +1,4 @@
-package main.display.objects;
+package main.widgets.objects;
 
 public class Frame extends GuiObject {
 
