@@ -4,7 +4,6 @@ import main.math.Color3;
 import main.math.UDim2;
 import main.math.Vector2;
 import main.math.Vector2int;
-import main.signal.SignalListener;
 import main.widgets.events.GuiEvents;
 
 public class GuiObject extends GuiBase {
@@ -20,6 +19,7 @@ public class GuiObject extends GuiBase {
 	protected int rotation;
 	protected int zIndex;
 	protected boolean clipDescendants;
+	protected GuiEvents guiEvents;
 	
 	// Constructors //
 	public GuiObject() {
@@ -39,6 +39,8 @@ public class GuiObject extends GuiBase {
 		this.rotation = 0;
 		this.zIndex = 1;
 		this.clipDescendants = true;
+		
+		this.guiEvents = new GuiEvents();
 	}
 	
 	public float getBackgroundTransparency() {
@@ -123,6 +125,10 @@ public class GuiObject extends GuiBase {
 		this.clipDescendants = clipDescendants;
 	}
 
+	public GuiEvents getGuiEvents() {
+		return this.guiEvents;
+	}
+	
 	@Override
 	public void setParent(GuiBase parent) {
 		super.setParent(parent);

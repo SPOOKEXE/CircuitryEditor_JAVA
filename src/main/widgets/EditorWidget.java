@@ -6,6 +6,8 @@ import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
 import main.signal.SignalListener;
+import main.widgets.events.GuiEvents;
+import main.widgets.objects.AspectRatioConstraint;
 import main.widgets.objects.Frame;
 import main.widgets.objects.ImageLabel;
 
@@ -74,7 +76,13 @@ public class EditorWidget extends BaseWidget {
 		testImage1.setImageTransparency(0.3F);
 		testImage1.setParent(this.baseGuiData);
 		
-		testImage1.onMouseEnter(new SignalListener() {
+		AspectRatioConstraint constraint = new AspectRatioConstraint();
+		constraint.aspectRatio = 3;
+		constraint.setParent(this.baseGuiData);
+		
+		GuiEvents imageLabelEvents = testImage1.getGuiEvents();
+		
+		imageLabelEvents.onMouseEnter(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				System.out.println("Mouse has entered the test image frame!");
@@ -82,7 +90,7 @@ public class EditorWidget extends BaseWidget {
 			}
 		});
 		
-		testImage1.onMouseLeave(new SignalListener() {
+		imageLabelEvents.onMouseLeave(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				System.out.println("Mouse has left the test image frame!");

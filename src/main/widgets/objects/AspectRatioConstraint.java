@@ -1,21 +1,24 @@
-package sort.aspectratio;
+package main.widgets.objects;
 
+import main.enumerations.AspectRatioType;
 import main.enumerations.DominantAxis;
 import main.math.Vector2int;
-import main.widgets.objects.GuiBase;
 
-public class AspectRatioConstraint {
+public class AspectRatioConstraint extends Instance {
 
+	// Fields //
 	protected GuiBase parent;
 
-	protected float aspectRatio;
+	public float aspectRatio;
 	protected AspectRatioType aspectType;
 	protected DominantAxis dominantAxis;
 
+	// Constructors //
 	public AspectRatioConstraint() {
 		this.setDefault();
 	}
 
+	// Class Methods //
 	private void setDefault() {
 		this.parent = null;
 		this.aspectRatio = 1;

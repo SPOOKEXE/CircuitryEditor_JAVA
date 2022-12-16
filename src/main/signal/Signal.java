@@ -11,11 +11,26 @@ public class Signal {
 	protected boolean disconnected;
 	
 	// Constructors //
-	public Signal() { }
-	public Signal(SignalListener...listeners) { this.OnEvent(listeners); }
-	public Signal(ArrayList<SignalListener> listeners) { this.OnEvent(listeners); }
+	public Signal() {
+		this.setDefault();
+	}
+	
+	public Signal(SignalListener...listeners) {
+		this.setDefault();
+		this.OnEvent(listeners);
+	}
+	
+	public Signal(ArrayList<SignalListener> listeners) {
+		this.setDefault();
+		this.OnEvent(listeners);
+	}
 	
 	// Class Methods //
+	private void setDefault() {
+		this.listeners = new ArrayList<SignalListener>();
+		this.disconnected = false;
+	}
+	
 	public void Fire(HashMap<String, Object> args) {
 		if (disconnected) {
 			return;

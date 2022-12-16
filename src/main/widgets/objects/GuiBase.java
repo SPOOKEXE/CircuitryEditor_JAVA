@@ -4,9 +4,8 @@ import java.util.UUID;
 
 import main.data.Attributes;
 import main.math.Vector2int;
-import main.widgets.events.GuiEvents;
 
-public class GuiBase extends GuiEvents {
+public class GuiBase extends Instance {
 
 	// Fields //
 	protected String uid;
@@ -70,7 +69,7 @@ public class GuiBase extends GuiEvents {
 	public Vector2int getAbsolutePosition() {
 		return absolutePosition;
 	}
-
+	
 	public void setAbsolutePosition(Vector2int absolutePosition) {
 		this.absolutePosition = absolutePosition;
 	}
