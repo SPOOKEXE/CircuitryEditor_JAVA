@@ -2,6 +2,7 @@ package main.widgets;
 
 import java.util.HashMap;
 
+import main.enumerations.DominantAxis;
 import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
@@ -23,6 +24,7 @@ public class EditorWidget extends BaseWidget {
 
 	// Class Methods //
 	private void setDefault() {
+		
 		// Test Frames
 //		Frame testFrame1 = new Frame();
 //		testFrame1.setName("Test Frame 1");
@@ -63,42 +65,53 @@ public class EditorWidget extends BaseWidget {
 		ImageLabel testImage1 = new ImageLabel();
 		testImage1.setName("Test Image 1");
 		testImage1.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
-//		testImage1.setSize(new UDim2(0, 192*2, 0, 120*2));
 		testImage1.setSize(new UDim2(0.1, 0, 0.1, 0));
 		testImage1.setPosition(new UDim2(0.45, 0, 0.45, 0));
 		testImage1.setZIndex(8);
 		testImage1.setBackgroundTransparency(0.5F);
-//		testImage1.setImageScaleType(ImageScaleType.STRETCH);
 		testImage1.setImageScaleType(ImageScaleType.FIT);
 		testImage1.setOutlineEnabled(true);
 		testImage1.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
 		testImage1.setImageTransparency(0.3F);
 		testImage1.setParent(this.baseGuiData);
-
-		this.appendGuiObjects(testImage1);
-		
 		AspectRatioConstraint constraint = new AspectRatioConstraint();
 		constraint.aspectRatio = 3;
 		constraint.setParent(testImage1);
+		this.appendGuiObjects(testImage1);
 		
-		GuiEvents imageLabelEvents = testImage1.getGuiEvents();
+		ImageLabel testImage2 = new ImageLabel();
+		testImage2.setName("Test Image 2");
+		testImage2.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
+		testImage2.setSize(new UDim2(0.1, 0, 0.1, 0));
+		testImage2.setPosition(new UDim2(0.15, 0, 0.15, 0));
+		testImage2.setZIndex(9);
+		testImage2.setBackgroundTransparency(0.5F);
+		testImage2.setImageScaleType(ImageScaleType.FIT);
+		testImage2.setOutlineEnabled(true);
+		testImage2.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
+		testImage2.setImageTransparency(0.3F);
+		testImage2.setParent(this.baseGuiData);
+		AspectRatioConstraint constraint2 = new AspectRatioConstraint();
+		constraint2.aspectRatio = 3;
+		constraint2.setDominantAxis(DominantAxis.Height);
+		constraint2.setParent(testImage2);
+		this.appendGuiObjects(testImage2);
 		
-		imageLabelEvents.onMouseEnter(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println("Mouse has entered the test image frame!");
-				System.out.println(args);
-			}
-		});
-		
-		imageLabelEvents.onMouseLeave(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println("Mouse has left the test image frame!");
-				System.out.println(args);
-			}
-		});
-		
+//		GuiEvents imageLabelEvents = testImage1.getGuiEvents();
+//		imageLabelEvents.onMouseEnter(new SignalListener() {
+//			@Override
+//			public void handle(HashMap<String, Object> args) {
+//				System.out.println("Mouse has entered the test image frame!");
+//				System.out.println(args);
+//			}
+//		});
+//		imageLabelEvents.onMouseLeave(new SignalListener() {
+//			@Override
+//			public void handle(HashMap<String, Object> args) {
+//				System.out.println("Mouse has left the test image frame!");
+//				System.out.println(args);
+//			}
+//		});
 	}
 
 	@Override

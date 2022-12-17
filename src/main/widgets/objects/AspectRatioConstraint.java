@@ -19,7 +19,7 @@ public class AspectRatioConstraint extends Instance {
 	// Class Methods //
 	private void setDefault() {
 		this.aspectRatio = 1;
-		this.aspectType = AspectRatioType.FitWithinMaxSize;
+		this.aspectType = AspectRatioType.ScaleWithParent;
 		this.dominantAxis = DominantAxis.Width;
 	}
 
@@ -63,12 +63,11 @@ public class AspectRatioConstraint extends Instance {
 		
 //		}
 
-		
 		// SCALE WITH MAX SIZE
 		if (this.dominantAxis == DominantAxis.Width) {
-			return new Vector2int( prntAbsSize.x, prntAbsSize.x * this.aspectRatio );
+			return new Vector2int( prntAbsSize.x, prntAbsSize.x / this.aspectRatio );
 		}
-		return new Vector2int( prntAbsSize.y * this.aspectRatio, prntAbsSize.y );
+		return new Vector2int( prntAbsSize.y / this.aspectRatio, prntAbsSize.y );
 	}
 
 	@Override
