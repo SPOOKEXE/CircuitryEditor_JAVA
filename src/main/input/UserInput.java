@@ -30,6 +30,8 @@ public class UserInput {
 	
 	public void setupListeners(JFrame frame) {
 		frame.addMouseListener(this.getMouse());
+		frame.addMouseMotionListener(this.getMouse());
+		frame.addMouseWheelListener(this.getMouse());
 		frame.addKeyListener(this.getKeyboard());
 	}
 	

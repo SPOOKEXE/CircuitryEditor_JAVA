@@ -2,7 +2,6 @@ package main.widgets;
 
 import java.util.HashMap;
 
-import main.enumerations.DominantAxis;
 import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
@@ -79,24 +78,24 @@ public class EditorWidget extends BaseWidget {
 		constraint.aspectRatio = 1;
 		constraint.setParent(testImage1);
 		
-		ImageLabel testImage2 = new ImageLabel();
-		testImage2.setName("Test Image 2");
-		testImage2.setAnchorPoint(new Vector2(1F, 1F));
-		testImage2.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
-		testImage2.setSize(new UDim2(0.1, 0, 0.1, 0));
-		testImage2.setPosition(new UDim2(0.45, 0, 0.45, 0));
-		testImage2.setZIndex(9);
-		testImage2.setBackgroundTransparency(0.5F);
-		testImage2.setImageScaleType(ImageScaleType.FIT);
-		testImage2.setOutlineEnabled(true);
-		testImage2.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
-		testImage2.setImageTransparency(0.3F);
-		testImage2.setParent(this.baseGuiData);
-		AspectRatioConstraint constraint2 = new AspectRatioConstraint();
-		constraint2.aspectRatio = 1;
-		constraint2.setParent(testImage2);
+//		ImageLabel testImage2 = new ImageLabel();
+//		testImage2.setName("Test Image 2");
+//		testImage2.setAnchorPoint(new Vector2(1F, 1F));
+//		testImage2.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
+//		testImage2.setSize(new UDim2(0.1, 0, 0.1, 0));
+//		testImage2.setPosition(new UDim2(0.45, 0, 0.45, 0));
+//		testImage2.setZIndex(9);
+//		testImage2.setBackgroundTransparency(0.5F);
+//		testImage2.setImageScaleType(ImageScaleType.FIT);
+//		testImage2.setOutlineEnabled(true);
+//		testImage2.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
+//		testImage2.setImageTransparency(0.3F);
+//		testImage2.setParent(this.baseGuiData);
+//		AspectRatioConstraint constraint2 = new AspectRatioConstraint();
+//		constraint2.aspectRatio = 1;
+//		constraint2.setParent(testImage2);
 		
-		this.appendGuiObjects(testImage1, testImage2);
+		this.appendGuiObjects(testImage1);//, testImage2);
 		
 		GuiEvents imageLabelEvents = testImage1.getGuiEvents();
 		
@@ -104,7 +103,7 @@ public class EditorWidget extends BaseWidget {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				System.out.println("Mouse has entered the test image frame!");
-				System.out.println(args);
+				System.out.println("Args: " + args);
 			}
 		});
 		
@@ -112,7 +111,7 @@ public class EditorWidget extends BaseWidget {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				System.out.println("Mouse has left the test image frame!");
-				System.out.println(args);
+				System.out.println("Args: " + args);
 			}
 		});
 		
@@ -127,7 +126,7 @@ public class EditorWidget extends BaseWidget {
 				}
 				
 				boolean flip = (boolean) this.data.get("flip");
-				testImage2.setAnchorPoint(flip ? new Vector2(1F, 1F) : new Vector2());
+				testImage1.setAnchorPoint(flip ? new Vector2(1F, 1F) : new Vector2());
 				this.data.put("flip", !flip);
 			}
 		});

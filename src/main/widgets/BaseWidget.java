@@ -14,7 +14,9 @@ import java.util.HashMap;
 import main.display.variations.SimpleViewport;
 import main.enumerations.ImageScaleType;
 import main.enumerations.ZIndexSortType;
+import main.input.Mouse;
 import main.input.UserInput;
+import main.math.Intersects;
 import main.math.Vector2;
 import main.math.Vector2int;
 import main.signal.SignalListener;
@@ -55,6 +57,10 @@ public class BaseWidget {
 	
 	public ArrayList<GuiObject> getSortedRenders() {
 		return this.guiObjectManager.getSorted();
+	}
+	
+	public ArrayList<GuiObject> getUnsortedRenders() {
+		return this.guiObjectManager.getUnsorted();
 	}
 	
 	public void setZIndexSortType(ZIndexSortType sortType) {
@@ -112,6 +118,28 @@ public class BaseWidget {
 		return this.userInput;
 	}
 	
+	public ArrayList<GuiObject> getGuiObjectsAtMouseXY(Vector2int mouseXY) {
+		// TODO: also check anchor point
+		ArrayList<GuiObject> objects = new ArrayList<GuiObject>();
+		for (GuiObject guiObj : this.getSortedRenders()) {
+			Vector2int absP = guiObj.getAbsolutePosition();
+			Vector2int absS = guiObj.getAbsoluteSize();
+			if (Intersects.PointInSquare( mouseXY, absP, absP.add( absS ))) {
+				objects.add(guiObj);
+			}
+		}
+		return objects;
+	}
+	
+	public ArrayList<GuiObject> getGuiObjectsAtMouseXY(int mouseX, int mouseY) {
+		return getGuiObjectsAtMouseXY(new Vector2int(mouseX, mouseY));
+	}
+	
+	public ArrayList<GuiObject> getGuiObjectsAtActiveMouse() {
+		Mouse mouse = this.getUserInput().getMouse();
+		return this.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+	}
+	
 	public boolean Init() {
 		if (this.initialized) {
 			return false;
@@ -131,31 +159,100 @@ public class BaseWidget {
             }
         });
 		
+		this.getUserInput().getMouse().onMouseMove(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				ArrayList<GuiObject> uiObjs = getGuiObjectsAtActiveMouse();
+				
+				// handle mouse enter, move, and leave of GuiObjects
+				GuiObject hovered = uiObjs.size() != 0 ? uiObjs.get(0) : null;
+				if (hovered != null) {
+					Object mouseHoveredObject = this.data.get("Hovered");
+					if (mouseHoveredObject != null) {
+						((GuiObject)mouseHoveredObject).getGuiEvents().onMouseMove.Fire(args);
+					}
+					if (mouseHoveredObject != hovered) {
+						if (mouseHoveredObject != null) {
+							((GuiObject)mouseHoveredObject).getGuiEvents().onMouseLeave.Fire(args);
+						}
+						hovered.getGuiEvents().onMouseEnter.Fire(args);
+						this.data.put("Hovered", hovered);
+					}
+					hovered.getGuiEvents().onMouseMove.Fire(args);
+					return;
+				}
+				
+				Object mouseHoveredObject = this.data.get("Hovered");
+				if (mouseHoveredObject != null) {
+					((GuiObject)mouseHoveredObject).getGuiEvents().onMouseLeave.Fire(args);
+				}
+				
+				this.data.put("Hovered", null);
+				// mouse moved in base widget frame
+			}
+		});
+		
 		this.getUserInput().getMouse().onMouse1Down(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
+				
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onMouse1Down.Fire(args);
+					return;
+				}
+				
 				System.out.println("mouse 1 down");
+				
 			}
 		});
 		
 		this.getUserInput().getMouse().onMouse1Up(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
+				
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onMouse1Up.Fire(args);
+					return;
+				}
+				
 				System.out.println("mouse 1 up");
+				
 			}
 		});
 		
 		this.getUserInput().getMouse().onMouse2Down(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
+				
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onMouse2Down.Fire(args);
+					return;
+				}
+				
 				System.out.println("mouse 2 down");
+				
 			}
 		});
 		
 		this.getUserInput().getMouse().onMouse2Up(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
+				
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onMouse2Up.Fire(args);
+					return;
+				}
+				
 				System.out.println("mouse 2 up");
+				
 			}
 		});
 		
@@ -183,6 +280,13 @@ public class BaseWidget {
 		this.getUserInput().getKeyboard().onInputBegin(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onInputBegin.Fire(args);
+					return;
+				}
+				
 				System.out.println("released pressed: " + args.get("KeyChar"));
 			}
 		});
@@ -190,6 +294,13 @@ public class BaseWidget {
 		this.getUserInput().getKeyboard().onInputEnded(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onInputEnded.Fire(args);
+					return;
+				}
+				
 				System.out.println("released key: " + args.get("KeyChar"));
 			}
 		});
@@ -232,6 +343,8 @@ public class BaseWidget {
 		g2d.translate(0, 30); // control bar
 		for (GuiObject rObject : this.guiObjectManager.getSorted()) {
 
+			// TODO: implement mouse events / keyboard events for UI objects
+			
 			// TODO: implement clip descendants + image clipping
 			// TODO: implement parent-zIndex GuiObject sorting part (ZIndexSortType.Sibling)
 			// TODO: implement 'ui-padding'

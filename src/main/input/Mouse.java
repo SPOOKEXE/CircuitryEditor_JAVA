@@ -109,7 +109,7 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		System.out.println(event.getButton());
+//		System.out.println(event.getButton());
 		
 		this.active_keys_ints.add(event.getButton());
 		if (event.getButton() == 1) {
@@ -126,7 +126,7 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		System.out.println(event.getButton());
+//		System.out.println(event.getButton());
 		
 		this.active_keys_ints.remove((Object) event.getButton());
 		if (event.getButton() == 1) {
