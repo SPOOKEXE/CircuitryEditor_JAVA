@@ -15,32 +15,28 @@ public class Instance {
 	}
 	
 	// Class Methods //
-	public void setChildren(ArrayList<Instance> children) {
-		this.children = children;
+	public void appendChild(Instance child) {
+		this.children.addAll(children);
 	}
 	
 	public void appendChildren(ArrayList<Instance> children) {
-		if (this.children == null) {
-			this.children = new ArrayList<Instance>();
-		}
 		this.children.addAll(children);
 	}
 	
 	public void removeChild(Instance child) {
-		if (this.children != null) {
-			while (this.children.remove(child)) { } // remove all
-		}
+		while (this.children.remove(child)) { } // remove all
 	}
 	
 	public void removeChildren(ArrayList<Instance> children) {
-		if (this.children != null) {
-			while (this.children.removeAll(children)) { } // remove all
-		}
+		while (this.children.removeAll(children)) { } // remove all
 	}
 	
 	public void setParent(Instance parent) {
 		if (this.parent != null) {
 			this.parent.removeChild(parent);
+		}
+		if (parent != null) {
+			parent.appendChild(parent);
 		}
 		this.parent = parent;
 	}
