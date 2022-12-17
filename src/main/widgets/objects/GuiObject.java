@@ -1,9 +1,15 @@
 package main.widgets.objects;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Image;
+
+import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
 import main.math.Vector2;
 import main.math.Vector2int;
+import main.utility.GraphicUtility;
 import main.widgets.events.GuiEvents;
 
 public class GuiObject extends GuiBase {
@@ -68,15 +74,17 @@ public class GuiObject extends GuiBase {
 		UDim2 thisPositionUDim2 = this.position;
 		
 		// no parent, use offset values
-		if (this.parent == null) {
+		if (this.parent == null || !(this.parent instanceof GuiBase)) {
 			this.setAbsolutePosition(new Vector2int(thisPositionUDim2.offset_x, thisPositionUDim2.offset_y));
 			this.setAbsoluteSize(new Vector2int(thisSizeUDim2.offset_x, thisSizeUDim2.offset_y));
 			return;
 		}
 		
+		GuiBase parent = (GuiBase) this.parent;
+		
 		// parent, use scale & offset
-		Vector2int parentPosition = this.parent.getAbsolutePosition();
-		Vector2int parentSize = this.parent.getAbsoluteSize();
+		Vector2int parentPosition = parent.getAbsolutePosition();
+		Vector2int parentSize = parent.getAbsoluteSize();
 		
 		this.setAbsoluteSize(new Vector2int(
 			(parentSize.x * thisSizeUDim2.scale_x) + thisSizeUDim2.offset_x,
@@ -130,7 +138,7 @@ public class GuiObject extends GuiBase {
 	}
 	
 	@Override
-	public void setParent(GuiBase parent) {
+	public void setParent(Instance parent) {
 		super.setParent(parent);
 		this.updateAbsolutes();
 	}

@@ -17,9 +17,11 @@ import main.input.UserInput;
 import main.math.Vector2int;
 import main.utility.GraphicUtility;
 import main.widgets.managers.GuiObjectManager;
+import main.widgets.objects.AspectRatioConstraint;
 import main.widgets.objects.GuiBase;
 import main.widgets.objects.GuiObject;
 import main.widgets.objects.ImageLabel;
+import main.widgets.objects.Instance;
 
 public class BaseWidget {
 
@@ -154,14 +156,9 @@ public class BaseWidget {
 	}
 	
 	public void drawObjects(Graphics2D g2d) {
-		
 		g2d.translate(0, 30); // control bar
-		
 		for (GuiObject rObject : this.guiObjectManager.getSorted()) {
-			
-			rObject.updateAbsolutes();
-			
-			// TODO: implement aspect ratios
+
 			// TODO: implement anchor point
 			// TODO: implement clip descendants + image clipping
 			// TODO: implement parent-zIndex GuiObject sorting part (ZIndexSortType.Sibling)
@@ -236,7 +233,6 @@ public class BaseWidget {
 				if (backgroundTransparency != 0) {
 					GraphicUtility.SetBackgroundTransparency(g2d, 0);
 				}
-				
 			}
 			
 		}

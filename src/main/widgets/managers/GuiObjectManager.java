@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import main.enumerations.ZIndexSortType;
 import main.widgets.objects.GuiBase;
 import main.widgets.objects.GuiObject;
+import main.widgets.objects.Instance;
 
 public class GuiObjectManager {
 
@@ -127,8 +128,8 @@ public class GuiObjectManager {
 			if (object.isDescendantOf(null) || (!(object.getParent() instanceof GuiBase))) {
 				continue;
 			}
-			 
-			GuiBase objParent = object.getParent();
+			
+			GuiBase objParent = (GuiBase) object.getParent();
 			
 			// if there is no zIndex sorted HashMap, create it
 			HashMap<Integer, ArrayList<GuiObject>> sortedChildren = sortedParentZIndexBuffer.get(objParent);
