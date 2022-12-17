@@ -9,6 +9,7 @@ import main.math.Vector2;
 import main.signal.SignalListener;
 import main.widgets.events.GuiEvents;
 import main.widgets.objects.AspectRatioConstraint;
+import main.widgets.objects.Frame;
 import main.widgets.objects.ImageLabel;
 import main.widgets.objects.UIScale;
 
@@ -27,41 +28,41 @@ public class EditorWidget extends BaseWidget {
 	private void setDefault() {
 		
 		// Test Frames
-//		Frame testFrame1 = new Frame();
-//		testFrame1.setName("Test Frame 1");
-//		testFrame1.setBackgroundColor3(Color3.fromRGB(255, 0, 0));
-//		testFrame1.setBackgroundTransparency(0.3F);
-//		testFrame1.setSize(new UDim2(0.5, 0, 0.5, 0));
-//		testFrame1.setPosition(new UDim2(0.35, 0, 0.35, 0));
-//		testFrame1.setZIndex(5);
-//		testFrame1.setParent(this.baseGuiData);
-//
-//		Frame testFrame2 = new Frame();
-//		testFrame2.setName("Test Frame 2");
-//		testFrame2.setBackgroundColor3(Color3.fromRGB(0, 0, 255));
-//		testFrame2.setSize(new UDim2(0.25, 0, 0.25, 0));
-//		testFrame2.setPosition(new UDim2(0.1, 0, 0.1, 0));
-//		testFrame2.setZIndex(3);
-//		testFrame2.setParent(this.baseGuiData);
-//
-//		Frame testFrame3 = new Frame();
-//		testFrame3.setName("Test Frame 3");
-//		testFrame3.setBackgroundColor3(Color3.fromRGB(0, 255, 0));
-//		testFrame3.setBackgroundTransparency(0.3F);
-//		testFrame3.setSize(new UDim2(0.25, 0, 0.5, 0));
-//		testFrame3.setPosition(new UDim2(0.5, 0, 0.25, 0));
-//		testFrame3.setZIndex(4);
-//		testFrame3.setParent(testFrame2);
-//		
-//		Frame testFrame4 = new Frame();
-//		testFrame4.setName("Test Frame 4");
-//		testFrame4.setBackgroundColor3(Color3.fromRGB(0, 255, 0));
-//		testFrame4.setSize(new UDim2(0.25, 0, 0.5, 0));
-//		testFrame4.setPosition(new UDim2(0.25, 0, 0.25, 0));
-//		testFrame4.setZIndex(5);
-//		testFrame4.setParent(testFrame2);
-//		
-//		this.appendGuiObjects( testFrame1, testFrame2, testFrame3, testFrame4);
+		Frame testFrame1 = new Frame();
+		testFrame1.setName("Test Frame 1");
+		testFrame1.setBackgroundColor3(Color3.fromRGB(255, 0, 0));
+		testFrame1.setBackgroundTransparency(0.3F);
+		testFrame1.setSize(new UDim2(0.5, 0, 0.5, 0));
+		testFrame1.setPosition(new UDim2(0.35, 0, 0.35, 0));
+		testFrame1.setZIndex(5);
+		testFrame1.setParent(this.baseGuiData);
+
+		Frame testFrame2 = new Frame();
+		testFrame2.setName("Test Frame 2");
+		testFrame2.setBackgroundColor3(Color3.fromRGB(0, 0, 255));
+		testFrame2.setSize(new UDim2(0.25, 0, 0.25, 0));
+		testFrame2.setPosition(new UDim2(0.1, 0, 0.1, 0));
+		testFrame2.setZIndex(3);
+		testFrame2.setParent(this.baseGuiData);
+
+		Frame testFrame3 = new Frame();
+		testFrame3.setName("Test Frame 3");
+		testFrame3.setBackgroundColor3(Color3.fromRGB(0, 255, 0));
+		testFrame3.setBackgroundTransparency(0.3F);
+		testFrame3.setSize(new UDim2(0.25, 0, 0.5, 0));
+		testFrame3.setPosition(new UDim2(0.5, 0, 0.25, 0));
+		testFrame3.setZIndex(4);
+		testFrame3.setParent(testFrame2);
+		
+		Frame testFrame4 = new Frame();
+		testFrame4.setName("Test Frame 4");
+		testFrame4.setBackgroundColor3(Color3.fromRGB(0, 255, 0));
+		testFrame4.setSize(new UDim2(0.25, 0, 0.5, 0));
+		testFrame4.setPosition(new UDim2(0.25, 0, 0.25, 0));
+		testFrame4.setZIndex(5);
+		testFrame4.setParent(testFrame2);
+		
+		this.appendGuiObjects( testFrame1, testFrame2, testFrame3, testFrame4);
 		
 		ImageLabel testImage1 = new ImageLabel();
 		testImage1.setName("Test Image 1");

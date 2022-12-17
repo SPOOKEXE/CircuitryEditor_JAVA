@@ -172,7 +172,7 @@ public class BaseWidget {
 				ArrayList<GuiObject> uiObjs = getGuiObjectsAtActiveMouse();
 				
 				// handle mouse enter, move, and leave of GuiObjects
-				GuiObject hovered = uiObjs.size() != 0 ? uiObjs.get(0) : null;
+				GuiObject hovered = uiObjs.size() != 0 ? uiObjs.get( uiObjs.size() - 1 ) : null;
 				if (hovered != null) {
 					self.widgetEvents.onMouseLeave.Fire(args);
 					Object mouseHoveredObject = this.data.get("Hovered");
@@ -207,7 +207,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onMouse1Down.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onMouse1Down.Fire(args);
 					return;
 				}
 				self.widgetEvents.onMouse1Down.Fire();
@@ -220,7 +220,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onMouse1Up.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onMouse1Up.Fire(args);
 					return;
 				}
 				self.widgetEvents.onMouse1Up.Fire();
@@ -233,7 +233,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onMouse2Down.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onMouse2Down.Fire(args);
 					return;
 				}
 				self.widgetEvents.onMouse2Down.Fire();
@@ -246,7 +246,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onMouse2Up.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onMouse2Up.Fire(args);
 					return;
 				}
 				self.widgetEvents.onMouse2Up.Fire();
@@ -259,7 +259,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onMouseScrollDown.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onMouseScrollDown.Fire(args);
 					return;
 				}
 //				System.out.println("mouse scroll down");
@@ -273,7 +273,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onMouseScrollUp.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onMouseScrollUp.Fire(args);
 					return;
 				}
 //				System.out.println("mouse scroll up");
@@ -287,7 +287,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onMouseScrolled.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onMouseScrolled.Fire(args);
 					return;
 				}
 //				System.out.println("mouse scrolled : " + args);
@@ -301,7 +301,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onInputBegin.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onInputBegin.Fire(args);
 					return;
 				}
 				// System.out.println("released pressed: " + args.get("KeyChar"));
@@ -315,7 +315,7 @@ public class BaseWidget {
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
-					uiObjs.get(0).getGuiEvents().onInputEnded.Fire(args);
+					uiObjs.get( uiObjs.size() - 1 ).getGuiEvents().onInputEnded.Fire(args);
 					return;
 				}
 				// System.out.println("released key: " + args.get("KeyChar"));
