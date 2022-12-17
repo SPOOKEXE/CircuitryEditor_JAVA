@@ -131,17 +131,66 @@ public class BaseWidget {
             }
         });
 		
-		this.getUserInput().getMouse().onMouse1Down.OnEvent(new SignalListener() {
+		this.getUserInput().getMouse().onMouse1Down(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				System.out.println("mouse 1 down");
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouse1Up.OnEvent(new SignalListener() {
+		this.getUserInput().getMouse().onMouse1Up(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				System.out.println("mouse 1 up");
+			}
+		});
+		
+		this.getUserInput().getMouse().onMouse2Down(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("mouse 2 down");
+			}
+		});
+		
+		this.getUserInput().getMouse().onMouse2Up(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("mouse 2 up");
+			}
+		});
+		
+		this.getUserInput().getMouse().onMouseScrollDown(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("mouse scroll down");
+			}
+		});
+		
+		this.getUserInput().getMouse().onMouseScrollUp(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("mouse scroll up");
+			}
+		});
+		
+		this.getUserInput().getMouse().onMouseScrolled(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("mouse scrolled");
+			}
+		});
+		
+		this.getUserInput().getKeyboard().onInputBegin(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("released pressed: " + args.get("KeyChar"));
+			}
+		});
+		
+		this.getUserInput().getKeyboard().onInputEnded(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("released key: " + args.get("KeyChar"));
 			}
 		});
 		

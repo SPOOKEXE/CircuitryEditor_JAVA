@@ -10,7 +10,9 @@ import main.signal.SignalListener;
 public class Keyboard implements KeyListener {
 
 	// Fields //
-	private boolean[] keys = new boolean[66568];
+	private boolean[] keys;
+	private HashMap<Integer, String> specialkeyMapping;
+	private HashMap<Integer, Boolean> activeKeys;
 
 	public Signal onInputBegin;
 	public Signal onInputEnded;
@@ -22,30 +24,58 @@ public class Keyboard implements KeyListener {
 	
 	// Class Methods //
 	private void setDefault() {
+		this.keys = new boolean[66568];
+		this.activeKeys = new HashMap<Integer, Boolean>();
+		
 		this.onInputBegin = new Signal();
 		this.onInputEnded = new Signal();
+		
+		this.specialkeyMapping = new HashMap<Integer, String>();
+		this.specialkeyMapping.put(27, "ESCAPE");
+		this.specialkeyMapping.put(16, "SHIFT");
+		this.specialkeyMapping.put(17, "CONTROL");
+		this.specialkeyMapping.put(20, "CAPS_LOCK");
 	}
 	
 	@Override
-	public void keyTyped(KeyEvent e) {
-		
-	}
+	public void keyTyped(KeyEvent e) { }
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		keys[ e.getKeyCode() ] = true;
 		
+		// prevent spam into events
+		if (activeKeys.get((Object) e.getKeyCode()) != null) {
+			return;
+		}
+		activeKeys.put(e.getKeyCode(), true);
+		
+//		System.out.println(e.getKeyCode());
+		
+		keys[ e.getKeyCode() ] = true;
 		HashMap<String, Object> args = new HashMap<String, Object>();
 		args.put("KeyCode", e.getKeyCode());
+		if (specialkeyMapping.get( e.getKeyCode() ) != null) {
+			args.put("KeyChar", specialkeyMapping.get( e.getKeyCode() ));
+		} else {
+			args.put("KeyChar", e.getKeyChar());
+		}
+		
 		this.onInputBegin.Fire(args);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		activeKeys.remove((Object) e.getKeyCode());
 		keys[ e.getKeyCode() ] = false;
 		
 		HashMap<String, Object> args = new HashMap<String, Object>();
 		args.put("KeyCode", e.getKeyCode());
+		if (specialkeyMapping.get( e.getKeyCode() ) != null) {
+			args.put("KeyChar", specialkeyMapping.get( e.getKeyCode() ));
+		} else {
+			args.put("KeyChar", e.getKeyChar());
+		}
+		
 		this.onInputEnded.Fire(args);
 	}
 	

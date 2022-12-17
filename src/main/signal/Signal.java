@@ -25,6 +25,7 @@ public class Signal {
 		if (disconnected) {
 			return;
 		}
+		
 		for (SignalListener listener : this.listeners) {
 			try {
 				listener.handle(args);
@@ -48,7 +49,12 @@ public class Signal {
 		if (this.disconnected) {
 			return;
 		}
-		this.listeners.addAll( Arrays.asList(listeners) );
+		
+		for (SignalListener listener : Arrays.asList(listeners)) {
+			if (listener != null) {
+				this.listeners.add(listener);
+			}
+		}
 	}
 	
 	public void Disconnect() {
