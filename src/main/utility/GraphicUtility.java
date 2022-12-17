@@ -66,7 +66,7 @@ public class GraphicUtility {
 		
 		int scaledWidth = (int) (imgWidth * scale);
 		int scaledHeight = (int) (imgHeight * scale);
-		if (scaledWidth < 0 || scaledHeight < 0) {
+		if (scaledWidth <= 0 || scaledHeight <= 0) {
 			return null;
 		}
 		

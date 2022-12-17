@@ -8,7 +8,6 @@ import main.math.UDim2;
 import main.signal.SignalListener;
 import main.widgets.events.GuiEvents;
 import main.widgets.objects.AspectRatioConstraint;
-import main.widgets.objects.Frame;
 import main.widgets.objects.ImageLabel;
 
 public class EditorWidget extends BaseWidget {

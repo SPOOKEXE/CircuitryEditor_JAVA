@@ -7,11 +7,9 @@ import main.math.Vector2int;
 public class AspectRatioConstraint extends Instance {
 
 	// Fields //
-	protected GuiBase parent;
-
 	public float aspectRatio;
-	protected AspectRatioType aspectType;
-	protected DominantAxis dominantAxis;
+	public AspectRatioType aspectType;
+	public DominantAxis dominantAxis;
 
 	// Constructors //
 	public AspectRatioConstraint() {
@@ -20,32 +18,66 @@ public class AspectRatioConstraint extends Instance {
 
 	// Class Methods //
 	private void setDefault() {
-		this.parent = null;
 		this.aspectRatio = 1;
 		this.aspectType = AspectRatioType.FitWithinMaxSize;
 		this.dominantAxis = DominantAxis.Width;
 	}
 
-	public Vector2int calculateDimensions() {
-		if (this.parent == null) {
-			return null;
-		}
-
-		Vector2int prntAbsSize = this.parent.getAbsoluteSize();
-
-		// Calculate the scaled vector
-		Vector2int scaledVector = null;
-		if (this.dominantAxis == DominantAxis.Width) {
-			scaledVector = new Vector2int( prntAbsSize.x, prntAbsSize.x * this.aspectRatio );
-		} else {
-			scaledVector = new Vector2int( prntAbsSize.y * this.aspectRatio, prntAbsSize.y );
-		}
-
-		if (this.aspectType == AspectRatioType.FitWithinMaxSize) {
-			float boundMult = Math.max( prntAbsSize.x/scaledVector.x, prntAbsSize.y/scaledVector.y );
-			scaledVector.mult(boundMult);
-		}
-		return scaledVector;
+	public float getAspectRatio() {
+		return aspectRatio;
 	}
 
+	public void setAspectRatio(float aspectRatio) {
+		this.aspectRatio = aspectRatio;
+	}
+
+	public AspectRatioType getAspectType() {
+		return aspectType;
+	}
+
+	public void setAspectType(AspectRatioType aspectType) {
+		this.aspectType = aspectType;
+	}
+
+	public DominantAxis getDominantAxis() {
+		return dominantAxis;
+	}
+
+	public void setDominantAxis(DominantAxis dominantAxis) {
+		this.dominantAxis = dominantAxis;
+	}
+
+	public Vector2int calculateDimensions() {
+		if (this.parent == null || !(this.parent instanceof GuiObject)) {
+			return new Vector2int();
+		}
+
+		Vector2int prntAbsSize = ((GuiObject) this.parent).absoluteSize;
+
+		// TODO: implement AspectRatioType.FitWithinMaxSize
+		
+//		if (this.aspectType == AspectRatioType.FitWithinMaxSize) {
+//			float boundMult = Math.max( prntAbsSize.x/scaledVector.x, prntAbsSize.y/scaledVector.y );
+//			scaledVector.mult(boundMult);
+//		} else {
+		
+//		}
+
+		
+		// SCALE WITH MAX SIZE
+		if (this.dominantAxis == DominantAxis.Width) {
+			return new Vector2int( prntAbsSize.x, prntAbsSize.x * this.aspectRatio );
+		}
+		return new Vector2int( prntAbsSize.y * this.aspectRatio, prntAbsSize.y );
+	}
+
+	@Override
+	public String toString() {
+		String superToStr = super.toString();
+		superToStr = superToStr.substring(0, superToStr.length()-1);
+		return
+			superToStr + ", aspectRatio=" + aspectRatio + ", aspectType=" +
+			aspectType + ", dominantAxis=" + dominantAxis + "]";
+	}
+	
 }

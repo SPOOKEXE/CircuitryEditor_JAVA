@@ -7,7 +7,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.enumerations.ImageScaleType;
-import main.signal.SignalListener;
 
 public class ImageLabel extends GuiObject {
 
@@ -94,9 +93,15 @@ public class ImageLabel extends GuiObject {
 	public void setImageTransparency(float transparency) {
 		this.imageTransparency = transparency;
 	}
-	
+
 	@Override
 	public String toString() {
-		return super.toString();
+		String superToStr = super.toString();
+		superToStr = superToStr.substring(0, superToStr.length()-1);
+		return
+			superToStr + ", imagePath=" + imagePath + ", scaleType=" +
+			scaleType + ", imageTransparency=" + imageTransparency + "]";
 	}
+	
+	
 }

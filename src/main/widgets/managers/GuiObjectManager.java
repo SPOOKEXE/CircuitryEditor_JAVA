@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import main.enumerations.ZIndexSortType;
 import main.widgets.objects.GuiBase;
 import main.widgets.objects.GuiObject;
-import main.widgets.objects.Instance;
 
 public class GuiObjectManager {
 

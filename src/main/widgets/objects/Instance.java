@@ -1,6 +1,7 @@
 package main.widgets.objects;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import main.data.Attributes;
 
@@ -17,11 +18,20 @@ public class Instance {
 	
 	// Constructors //
 	public Instance() {
-		this.parent = null;
-		this.children = new ArrayList<Instance>();
+		this.setDefault();
 	}
 	
 	// Class Methods //
+	private void setDefault() {
+		this.uid = UUID.randomUUID().toString();
+		this.name = "Instance";
+		
+		this.parent = null;
+		this.children = new ArrayList<Instance>();
+
+		this.attributes = new Attributes();
+	}
+	
 	public String getUID() {
 		return this.uid;
 	}
@@ -56,7 +66,7 @@ public class Instance {
 		}
 		this.parent = parent;
 		if (parent != null) {
-			parent.appendChild(parent);
+			parent.appendChild(this);
 		}
 	}
 	
@@ -207,6 +217,13 @@ public class Instance {
 		
 		// check if the parent is a descendant of the target
 		return this.parent.isDescendantOf(target);
+	}
+
+	@Override
+	public String toString() {
+		return
+			this.getClass().getSimpleName() + " [uid=" + uid + ", name=" + name + ", parent=" +
+			parent + ", children=" + children + ", attributes=" + attributes + "]";
 	}
 	
 }

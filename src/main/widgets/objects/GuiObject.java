@@ -1,15 +1,9 @@
 package main.widgets.objects;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-
-import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
 import main.math.Vector2;
 import main.math.Vector2int;
-import main.utility.GraphicUtility;
 import main.widgets.events.GuiEvents;
 
 public class GuiObject extends GuiBase {
@@ -142,14 +136,15 @@ public class GuiObject extends GuiBase {
 		super.setParent(parent);
 		this.updateAbsolutes();
 	}
-	
+
 	@Override
 	public String toString() {
 		String superToStr = super.toString();
 		superToStr = superToStr.substring(0, superToStr.length()-1);
-		return superToStr + ", backgroundTransparency=" + backgroundTransparency + ", backgroundColor3=" + backgroundColor3
-			+ ", size=" + size + ", position=" + position + ", rotation=" + rotation + ", zIndex=" + zIndex
-			+ ", clipDescendants=" + clipDescendants + "]";
+		return
+			superToStr + ", backgroundTransparency=" + backgroundTransparency + ", backgroundColor3=" + backgroundColor3
+			+ ", anchorPoint=" + anchorPoint + ", size=" + size + ", position=" + position + ", rotation=" + rotation +
+			", zIndex=" + zIndex + ", clipDescendants=" + clipDescendants + ", guiEvents=" + guiEvents + "]";
 	}
 
 }

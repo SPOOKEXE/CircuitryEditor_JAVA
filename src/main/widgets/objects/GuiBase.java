@@ -1,15 +1,12 @@
 package main.widgets.objects;
 
-import java.util.UUID;
-
-import main.data.Attributes;
 import main.math.Vector2int;
 
 public class GuiBase extends Instance {
 
 	// Fields //
-	protected Vector2int absoluteSize;
-	protected Vector2int absolutePosition;
+	public Vector2int absoluteSize;
+	public Vector2int absolutePosition;
 	
 	protected boolean showOutline;
 	
@@ -20,23 +17,14 @@ public class GuiBase extends Instance {
 	
 	// Class Methods //
 	private void setDefault() {
-		this.uid = UUID.randomUUID().toString();
-		
-		this.name = "GuiObject";
-		this.parent = null;
-		
 		this.absoluteSize = new Vector2int();
 		this.absolutePosition = new Vector2int();
-		
 		this.showOutline = false;
-		this.attributes = new Attributes();
 	}
 	
 	public Vector2int getAbsoluteSize() {
-		// TODO: implement aspect ratios
-		Instance aspectConstraint = this.findFirstChildOfClassName("AspectRatioConstraint");
+		Instance aspectConstraint = this.findFirstChildOfClass(AspectRatioConstraint.class);
 		if (aspectConstraint != null) {
-			System.out.println(((AspectRatioConstraint)aspectConstraint).aspectRatio);
 			return ((AspectRatioConstraint) aspectConstraint).calculateDimensions();
 		}
 		return this.absoluteSize;
@@ -64,10 +52,11 @@ public class GuiBase extends Instance {
 
 	@Override
 	public String toString() {
+		String superToStr = super.toString();
+		superToStr = superToStr.substring(0, superToStr.length()-1);
 		return
-			this.getClass().getSimpleName()
-			+ " [uuid=" + this.uid + ", name=" + name + ", parent=" + (parent==null ? "null" : parent.getUID()) + ", absoluteSize=" + absoluteSize + ", absolutePosition="
-			+ absolutePosition + ", attributes=" + attributes + "]";
+			superToStr + ", absoluteSize=" + absoluteSize + ", absolutePosition="
+			+ absolutePosition + ", showOutline=" + showOutline + "]";
 	}
 	
 }

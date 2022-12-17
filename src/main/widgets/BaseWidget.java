@@ -17,11 +17,9 @@ import main.input.UserInput;
 import main.math.Vector2int;
 import main.utility.GraphicUtility;
 import main.widgets.managers.GuiObjectManager;
-import main.widgets.objects.AspectRatioConstraint;
 import main.widgets.objects.GuiBase;
 import main.widgets.objects.GuiObject;
 import main.widgets.objects.ImageLabel;
-import main.widgets.objects.Instance;
 
 public class BaseWidget {
 
