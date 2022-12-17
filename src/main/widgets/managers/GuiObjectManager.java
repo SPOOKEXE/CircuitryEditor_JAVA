@@ -78,29 +78,6 @@ public class GuiObjectManager {
 		return this.sorted;
 	}
 	
-	// TODO: implement
-	public void updateMouseMoved() {
-		
-	}
-	
-	// TODO: implement
-	public boolean hasMouseMoved() {
-		
-		return false;
-	}
-	
-	// TODO: implement
-	public boolean hasMouseHoverTargetChanged() {
-		
-		return false;
-	}
-	
-	// TODO: implement
-	public GuiObject getCurrentMouseHoverTarget() {
-		
-		return null;
-	}
-	
 	private ArrayList<GuiObject> sortUnsorted() {
 		this.sorted = new ArrayList<GuiObject>();
 		

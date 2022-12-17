@@ -47,6 +47,26 @@ public class AspectRatioConstraint extends Instance {
 		this.dominantAxis = dominantAxis;
 	}
 
+	public Vector2int calculateDimensions(Vector2int useThis) {
+		if (this.parent == null || !(this.parent instanceof GuiObject)) {
+			return useThis;
+		}
+		
+		// TODO: implement AspectRatioType.FitWithinMaxSize
+		
+//		if (this.aspectType == AspectRatioType.FitWithinMaxSize) {
+//			float boundMult = Math.max( prntAbsSize.x/scaledVector.x, prntAbsSize.y/scaledVector.y );
+//			scaledVector.mult(boundMult);
+//		} else {
+		
+//		}
+		
+		if (this.dominantAxis == DominantAxis.Width) {
+			return new Vector2int( useThis.x, useThis.x / this.aspectRatio );
+		}
+		return new Vector2int( useThis.y / this.aspectRatio, useThis.y );
+	}
+	
 	public Vector2int calculateDimensions() {
 		if (this.parent == null || !(this.parent instanceof GuiObject)) {
 			return new Vector2int();

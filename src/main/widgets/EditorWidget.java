@@ -10,6 +10,7 @@ import main.signal.SignalListener;
 import main.widgets.events.GuiEvents;
 import main.widgets.objects.AspectRatioConstraint;
 import main.widgets.objects.ImageLabel;
+import main.widgets.objects.UIScale;
 
 public class EditorWidget extends BaseWidget {
 
@@ -65,6 +66,7 @@ public class EditorWidget extends BaseWidget {
 		ImageLabel testImage1 = new ImageLabel();
 		testImage1.setName("Test Image 1");
 		testImage1.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
+		testImage1.setAnchorPoint(new Vector2(0.5F, 0.5F));
 		testImage1.setSize(new UDim2(0.1, 0, 0.1, 0));
 		testImage1.setPosition(new UDim2(0.45, 0, 0.45, 0));
 		testImage1.setZIndex(8);
@@ -77,6 +79,9 @@ public class EditorWidget extends BaseWidget {
 		AspectRatioConstraint constraint = new AspectRatioConstraint();
 		constraint.aspectRatio = 1;
 		constraint.setParent(testImage1);
+		UIScale uscale = new UIScale();
+		uscale.scale = 3;
+		uscale.setParent(testImage1);
 		
 //		ImageLabel testImage2 = new ImageLabel();
 //		testImage2.setName("Test Image 2");
@@ -133,15 +138,28 @@ public class EditorWidget extends BaseWidget {
 				}
 				
 				boolean flip = (boolean) this.data.get("flip");
-				testImage1.setAnchorPoint(flip ? new Vector2(1F, 1F) : new Vector2());
+				testImage1.setAnchorPoint(flip ? new Vector2(0.75F, 0.75F) : new Vector2(0.25F, 0.25F));
 				this.data.put("flip", !flip);
 			}
 		});
 		
-		imageLabelEvents.onMouseScrolled(new SignalListener() {
+		imageLabelEvents.onMouse2Down(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
+				System.out.println("Mouse has right clicked the test image frame!");
 				System.out.println(args);
+				
+				if (this.data.get("scale") == null) {
+					this.data.put("scale", 1F);
+				}
+				
+				Float scale = (Float) this.data.get("scale");
+				scale = scale + 0.5F;
+				if (scale > 3) {
+					scale = 1F;
+				}
+				uscale.scale = scale;
+				this.data.put("scale", scale);
 			}
 		});
 		

@@ -23,11 +23,20 @@ public class GuiBase extends Instance {
 	}
 	
 	public Vector2int getAbsoluteSize() {
+		
+		Vector2int scaledSize = this.absoluteSize;
+		
+		Instance uiScale = this.findFirstChildOfClass(UIScale.class);
+		if (uiScale != null) {
+			scaledSize = ((UIScale) uiScale).calculateDimensions(scaledSize);
+		}
+		
 		Instance aspectConstraint = this.findFirstChildOfClass(AspectRatioConstraint.class);
 		if (aspectConstraint != null) {
-			return ((AspectRatioConstraint) aspectConstraint).calculateDimensions();
+			scaledSize = ((AspectRatioConstraint) aspectConstraint).calculateDimensions(scaledSize);
 		}
-		return this.absoluteSize;
+		
+		return scaledSize;
 	}
 
 	public void setAbsoluteSize(Vector2int absoluteSize) {

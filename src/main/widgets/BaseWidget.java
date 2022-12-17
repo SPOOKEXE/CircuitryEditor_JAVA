@@ -123,7 +123,7 @@ public class BaseWidget {
 	}
 	
 	public ArrayList<GuiObject> getGuiObjectsAtMouseXY(Vector2int mouseXY) {
-		// TODO: also check anchor point
+		// TODO: getGuiObjectsAtMouseXY >> check anchor point
 		ArrayList<GuiObject> objects = new ArrayList<GuiObject>();
 		for (GuiObject guiObj : this.getSortedRenders()) {
 			Vector2int absP = guiObj.getAbsolutePosition();
@@ -361,11 +361,10 @@ public class BaseWidget {
 		g2d.translate(0, 30); // control bar
 		for (GuiObject rObject : this.guiObjectManager.getSorted()) {
 
-			// TODO: implement mouse events / keyboard events for UI objects
-			
 			// TODO: implement clip descendants + image clipping
 			// TODO: implement parent-zIndex GuiObject sorting part (ZIndexSortType.Sibling)
 			// TODO: implement 'ui-padding'
+			// TODO: implement 'ui-scale'
 			
 			Vector2int absPosition = rObject.getAbsolutePosition();
 			Vector2int absSize = rObject.getAbsoluteSize();
@@ -444,7 +443,7 @@ public class BaseWidget {
 			
 			if (anchorPointVisual != null) {
 				g2d.setColor(new Color(255, 255, 255));
-				g2d.drawRect( anchorPointVisual.x, anchorPointVisual.y, 25, 25 );
+				g2d.drawRect( anchorPointVisual.x - 12, anchorPointVisual.y - 12, 24, 24 );
 			}
 			
 		}
