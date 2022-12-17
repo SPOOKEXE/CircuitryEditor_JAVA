@@ -21,6 +21,8 @@ public class GuiObject extends GuiBase {
 	protected boolean clipDescendants;
 	protected GuiEvents guiEvents;
 	
+	protected boolean showAnchorPoint;
+	
 	// Constructors //
 	public GuiObject() {
 		this.setDefault();
@@ -31,7 +33,7 @@ public class GuiObject extends GuiBase {
 		this.name = "GuiObject";
 		this.backgroundTransparency = 0;
 		this.backgroundColor3 = new Color3();
-		this.anchorPoint = new Vector2(0.5F, 0.5F);
+		this.anchorPoint = new Vector2();
 		
 		this.size = new UDim2();
 		this.position = new UDim2();
@@ -39,8 +41,9 @@ public class GuiObject extends GuiBase {
 		this.rotation = 0;
 		this.zIndex = 1;
 		this.clipDescendants = true;
-		
 		this.guiEvents = new GuiEvents();
+		
+		this.showAnchorPoint = true;
 	}
 	
 	public float getBackgroundTransparency() {
@@ -63,6 +66,14 @@ public class GuiObject extends GuiBase {
 		return size;
 	}
 
+	public void setAnchorPointVisible(boolean enabled) {
+		this.showAnchorPoint = enabled;
+	}
+	
+	public boolean isAnchorPointVisible() {
+		return this.showAnchorPoint;
+	}
+	
 	public void updateAbsolutes() {
 		UDim2 thisSizeUDim2 = this.size;
 		UDim2 thisPositionUDim2 = this.position;
@@ -127,6 +138,14 @@ public class GuiObject extends GuiBase {
 		this.clipDescendants = clipDescendants;
 	}
 
+	public Vector2 getAnchorPoint() {
+		return this.anchorPoint;
+	}
+	
+	public void setAnchorPoint(Vector2 anchorPoint) {
+		this.anchorPoint = anchorPoint;
+	}
+	
 	public GuiEvents getGuiEvents() {
 		return this.guiEvents;
 	}

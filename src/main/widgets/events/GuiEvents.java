@@ -19,9 +19,9 @@ public class GuiEvents {
 	public Signal onMouse2Up;
 	
 	// TODO: implement in BaseWidget
-	public Signal onInputDown;
+	public Signal onInputBegin;
 	public Signal onInputChanged;
-	public Signal onInputUp;
+	public Signal onInputEnded;
 	
 	// Constructors //
 	public GuiEvents() {
@@ -33,6 +33,15 @@ public class GuiEvents {
 		this.onMouseEnter = new Signal();
 		this.onMouseMove = new Signal();
 		this.onMouseLeave = new Signal();
+		
+		this.onMouse1Down = new Signal();
+		this.onMouse1Up = new Signal();
+		this.onMouse2Down = new Signal();
+		this.onMouse2Up = new Signal();
+		
+		this.onInputBegin = new Signal();
+		this.onInputChanged = new Signal();
+		this.onInputEnded = new Signal();
 	}
 	
 	public void onMouseEnter(SignalListener listener) {
@@ -45,5 +54,33 @@ public class GuiEvents {
 	
 	public void onMouseLeave(SignalListener listener) {
 		this.onMouseLeave.OnEvent(listener);
+	}
+	
+	public void onMouse1Down(SignalListener listener) {
+		this.onMouse1Down.OnEvent(listener);
+	}
+	
+	public void onMouse1Up(SignalListener listener) {
+		this.onMouse1Up.OnEvent(listener);
+	}
+	
+	public void onMouse2Down(SignalListener listener) {
+		this.onMouse2Down.OnEvent(listener);
+	}
+	
+	public void onMouse2Up(SignalListener listener) {
+		this.onMouse2Up.OnEvent(listener);
+	}
+	
+	public void onInputBegin(SignalListener listener) {
+		this.onInputBegin.OnEvent(listener);
+	}
+	
+	public void onInputChanged(SignalListener listener) {
+		this.onInputChanged.OnEvent(listener);
+	}
+	
+	public void onInputEnded(SignalListener listener) {
+		this.onInputEnded.OnEvent(listener);
 	}
 }

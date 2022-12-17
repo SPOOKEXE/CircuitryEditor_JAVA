@@ -7,9 +7,12 @@ public class SignalListener {
 	public static final String ANSI_RED = "\u001B[31m";
 	
 	// Fields //
+	protected HashMap<Object, Object> data;
 	
 	// Constructors //
-	public SignalListener() { }
+	public SignalListener() {
+		this.data = new HashMap<Object, Object>();
+	}
 	
 	// Class Methods //
 	

@@ -14,6 +14,7 @@ import main.display.variations.SimpleViewport;
 import main.enumerations.ImageScaleType;
 import main.enumerations.ZIndexSortType;
 import main.input.UserInput;
+import main.math.Vector2;
 import main.math.Vector2int;
 import main.utility.GraphicUtility;
 import main.widgets.managers.GuiObjectManager;
@@ -157,7 +158,6 @@ public class BaseWidget {
 		g2d.translate(0, 30); // control bar
 		for (GuiObject rObject : this.guiObjectManager.getSorted()) {
 
-			// TODO: implement anchor point
 			// TODO: implement clip descendants + image clipping
 			// TODO: implement parent-zIndex GuiObject sorting part (ZIndexSortType.Sibling)
 			// TODO: implement 'ui-padding'
@@ -165,6 +165,15 @@ public class BaseWidget {
 			Vector2int absPosition = rObject.getAbsolutePosition();
 			Vector2int absSize = rObject.getAbsoluteSize();
 			int absSizeHash = (absSize.x + "_" + absSize.y).hashCode();
+			
+			Vector2 anchorPoint = rObject.getAnchorPoint();
+			
+			Vector2int anchorPointVisual = null;
+			if (rObject.isAnchorPointVisible()) {
+				anchorPointVisual = new Vector2int(absPosition.x, absPosition.y);	
+			}
+			
+			absPosition = absPosition.sub(new Vector2int( (int) (anchorPoint.x * absSize.x), (int) (anchorPoint.y * absSize.y) ));
 			
 			if (rObject.isOutlineEnabled()) {
 				g2d.setColor(new Color(255,255,255));
@@ -207,7 +216,6 @@ public class BaseWidget {
 				
 				Image drawImage = imgLabel.getScaledImage();
 				if (drawImage != null) {
-					// TODO: get the scaled image to position in the top-middle of the frame (or have an anchor point for it)
 					int wdth = (int) ((absSize.x / 2) - (drawImage.getWidth(null) / 2));
 					g2d.drawImage(drawImage, absPosition.x + wdth, absPosition.y, drawImage.getWidth(null), drawImage.getHeight(null), null);
 				}
@@ -232,6 +240,11 @@ public class BaseWidget {
 				if (backgroundTransparency != 0) {
 					GraphicUtility.SetBackgroundTransparency(g2d, 0);
 				}
+			}
+			
+			if (anchorPointVisual != null) {
+				g2d.setColor(new Color(255, 255, 255));
+				g2d.drawRect( anchorPointVisual.x, anchorPointVisual.y, 25, 25 );
 			}
 			
 		}
