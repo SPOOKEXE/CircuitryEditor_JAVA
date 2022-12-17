@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import main.display.variations.SimpleViewport;
 import main.enumerations.ImageScaleType;
@@ -16,6 +17,7 @@ import main.enumerations.ZIndexSortType;
 import main.input.UserInput;
 import main.math.Vector2;
 import main.math.Vector2int;
+import main.signal.SignalListener;
 import main.utility.GraphicUtility;
 import main.widgets.managers.GuiObjectManager;
 import main.widgets.objects.GuiBase;
@@ -27,6 +29,7 @@ public class BaseWidget {
 	// Fields //
 	protected boolean initialized;
 	protected boolean started;
+	
 	protected SimpleViewport baseCanvas;
 	protected GuiBase baseGuiData;
 	protected UserInput userInput;
@@ -34,15 +37,22 @@ public class BaseWidget {
 	
 	// Constructors //
 	public BaseWidget() {
+		this.setDefault();
+	}
+	
+	// Class Methods //
+	private void setDefault() {
 		this.initialized = false;
 		this.started = false;
+		
 		this.baseGuiData = new GuiBase();
 		this.baseCanvas = new SimpleViewport();
 		this.userInput = new UserInput();
 		this.guiObjectManager = new GuiObjectManager(ZIndexSortType.Global);
+		
+		this.userInput.setupListeners(this.baseCanvas.getFrame()); // setup listeners
 	}
 	
-	// Class Methods //
 	public ArrayList<GuiObject> getSortedRenders() {
 		return this.guiObjectManager.getSorted();
 	}
@@ -111,14 +121,29 @@ public class BaseWidget {
 		// initialize
 		setWindowSize( this.baseCanvas.getWindowSize() );
 		
-		BaseWidget edd = this;
+		BaseWidget self = this;
+		
 		this.getViewportCanvas().getFrame().getRootPane().addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
-				Dimension windowSize = edd.getViewportCanvas().getFrame().getSize();
-				edd.setWindowSize( new Vector2int(windowSize.width, windowSize.height) );
-				edd.Draw();
+				Dimension windowSize = self.getViewportCanvas().getFrame().getSize();
+				self.setWindowSize( new Vector2int(windowSize.width, windowSize.height) );
+				self.Draw();
             }
         });
+		
+		this.getUserInput().getMouse().onMouse1Down.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("mouse 1 down");
+			}
+		});
+		
+		this.getUserInput().getMouse().onMouse1Up.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("mouse 1 up");
+			}
+		});
 		
 		return true;
 	}

@@ -1,10 +1,12 @@
 package main.input;
 
+import javax.swing.JFrame;
+
 public class UserInput {
 
 	// Fields //
-	public Mouse mouse;
-	public Keyboard keyboard;
+	protected Mouse mouse;
+	protected Keyboard keyboard;
 	
 	// Constructors //
 	public UserInput() {
@@ -12,9 +14,9 @@ public class UserInput {
 		this.keyboard = new Keyboard();
 	}
 	
-	public UserInput( Mouse nmouse, Keyboard nkeyboard ) {
-		this.mouse = nmouse;
-		this.keyboard = nkeyboard;
+	public UserInput( Mouse mouse, Keyboard keyboard ) {
+		this.mouse = mouse;
+		this.keyboard = keyboard;
 	}
 	
 	// Class Methods //
@@ -24,6 +26,11 @@ public class UserInput {
 	
 	public Keyboard getKeyboard() {
 		return this.keyboard;
+	}
+	
+	public void setupListeners(JFrame frame) {
+		frame.addMouseListener(this.getMouse());
+		frame.addKeyListener(this.getKeyboard());
 	}
 	
 }

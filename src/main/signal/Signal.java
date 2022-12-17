@@ -15,16 +15,6 @@ public class Signal {
 		this.setDefault();
 	}
 	
-	public Signal(SignalListener...listeners) {
-		this.setDefault();
-		this.OnEvent(listeners);
-	}
-	
-	public Signal(ArrayList<SignalListener> listeners) {
-		this.setDefault();
-		this.OnEvent(listeners);
-	}
-	
 	// Class Methods //
 	private void setDefault() {
 		this.listeners = new ArrayList<SignalListener>();
@@ -59,13 +49,6 @@ public class Signal {
 			return;
 		}
 		this.listeners.addAll( Arrays.asList(listeners) );
-	}
-	
-	public void OnEvent(ArrayList<SignalListener> listeners) {
-		if (this.disconnected) {
-			return;
-		}
-		this.listeners.addAll( listeners );
 	}
 	
 	public void Disconnect() {

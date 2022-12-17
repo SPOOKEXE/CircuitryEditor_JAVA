@@ -1,5 +1,8 @@
 package main.widgets.events;
 
+import java.util.HashMap;
+
+import main.input.UserInput;
 import main.signal.Signal;
 import main.signal.SignalListener;
 
@@ -42,6 +45,41 @@ public class GuiEvents {
 		this.onInputBegin = new Signal();
 		this.onInputChanged = new Signal();
 		this.onInputEnded = new Signal();
+	}
+	
+	public void setupUserInputSignals(UserInput userInput) {
+		
+		GuiEvents self = this;
+		
+		userInput.getMouse().onMouse1Down.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("button 1 down");
+				self.onMouse1Down.Fire(args);
+			}
+		});
+		
+		userInput.getMouse().onMouse1Up.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				self.onMouse1Up.Fire(args);
+			}
+		});
+		
+		userInput.getMouse().onMouse2Down.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				self.onMouse2Down.Fire(args);
+			}
+		});
+		
+		userInput.getMouse().onMouse2Up.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				self.onMouse2Up.Fire(args);
+			}
+		});
+		
 	}
 	
 	public void onMouseEnter(SignalListener listener) {

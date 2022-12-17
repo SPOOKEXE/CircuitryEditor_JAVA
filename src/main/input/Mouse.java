@@ -13,9 +13,9 @@ import main.signal.SignalListener;
 public class Mouse implements MouseListener, MouseMotionListener, MouseWheelListener {
 
 	// Fields //
-	protected int mouseX = 0; // x position
-	protected int mouseY = 0; // y position
-	protected int scrollZ = 0; // scroll-direction
+	protected int mouseX; // x position
+	protected int mouseY; // y position
+	protected int scrollZ; // scroll-direction
 	
 	protected boolean button1Down;
 	protected boolean button2Down;
@@ -34,13 +34,22 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	
 	// Constructor //
 	public Mouse() {
-		this.setDefualt();
+		this.setDefault();
 	}
 	
 	// Class Methods //
-	private void setDefualt() {
-		this.onMouseMove = new Signal();
+	private void setDefault() {
+		this.mouseX = 0;
+		this.mouseY = 0;
+		this.scrollZ = 0;
 		
+		this.button1Down = false;
+		this.button2Down = false;
+		this.buttonScrollDown = false;
+		
+		this.active_keys_ints = new ArrayList<Integer>();
+		
+		this.onMouseMove = new Signal();
 		this.onMouse1Down = new Signal();
 		this.onMouse1Up = new Signal();
 		this.onMouse2Down = new Signal();
@@ -92,6 +101,8 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
 	@Override
 	public void mousePressed(MouseEvent event) {
+		System.out.println(event.getButton());
+		
 		this.active_keys_ints.add(event.getButton());
 		if (event.getButton() == 1) {
 			this.button1Down = true;
@@ -107,7 +118,9 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 
 	@Override
 	public void mouseReleased(MouseEvent event) {
-		this.active_keys_ints.remove(event.getButton());
+		System.out.println(event.getButton());
+		
+		this.active_keys_ints.remove((Object) event.getButton());
 		if (event.getButton() == 1) {
 			this.button1Down = false;
 			this.onMouse1Up.Fire();
@@ -121,23 +134,31 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent event) { }
+	public void mouseClicked(MouseEvent event) {
+		System.out.println("click");
+	}
 
 	@Override
-	public void mouseEntered(MouseEvent event) { }
+	public void mouseEntered(MouseEvent event) {
+		System.out.println("enter");
+	}
 
 	@Override
-	public void mouseExited(MouseEvent event) { }
+	public void mouseExited(MouseEvent event) {
+		System.out.println("exit");
+	}
 	
 	public void onMouseMove(SignalListener listener) {
 		this.onMouseMove.OnEvent(listener);
 	}
 	
 	public void onMouse1Down(SignalListener listener) {
+		System.out.println("mouse 1 down");
 		this.onMouse1Down.OnEvent(listener);
 	}
 	
 	public void onMouse1Up(SignalListener listener) {
+		System.out.println("mouse 1 up");
 		this.onMouse1Up.OnEvent(listener);
 	}
 	
