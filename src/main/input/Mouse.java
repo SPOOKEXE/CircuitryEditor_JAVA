@@ -5,54 +5,120 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
 
-import main.enumerations.KeyTypes;
+import main.signal.Signal;
+import main.signal.SignalListener;
 
 public class Mouse implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-	private int mouseX = -1; // x position
-	private int mouseY = -1; // y position
-	private int mouseB = -1; // mouse button pressed (varies)
-	private int scroll = 0; // scroll
+	// Fields //
+	protected int mouseX = 0; // x position
+	protected int mouseY = 0; // y position
+	protected int scrollZ = 0; // scroll-direction
 	
-	public int getX() { return this.mouseX; }
-	public int getY() { return this.mouseY; }
-	public boolean isScrollingUp() { return this.scroll == -1; }
-	public boolean isScrollingDown() { return this.scroll == 1; }
+	protected boolean button1Down;
+	protected boolean button2Down;
+	protected boolean buttonScrollDown;
 	
-	public void resetScroll() { this.scroll = 0; }
+	protected ArrayList<Integer> active_keys_ints;
+
+	public Signal onMouseMove;
+	public Signal onMouse1Down;
+	public Signal onMouse1Up;
+	public Signal onMouse2Down;
+	public Signal onMouse2Up;
+	public Signal onMouseScroll;
+	public Signal onMouseScrollDown;
+	public Signal onMouseScrollUp;
 	
-	public KeyTypes getActiveButton() {
-		switch(this.mouseB) {
-			case 1:
-				return KeyTypes.LeftClick;
-			case 2:
-				return KeyTypes.ScrollClick;
-			case 3:
-				return KeyTypes.RightClick;
-			case 4:
-				return KeyTypes.ForwardPage;
-			case 5:
-				return KeyTypes.BackPage;
-			default:
-				return KeyTypes.Unknown;
+	// Constructor //
+	public Mouse() {
+		this.setDefualt();
+	}
+	
+	// Class Methods //
+	private void setDefualt() {
+		this.onMouseMove = new Signal();
+		
+		this.onMouse1Down = new Signal();
+		this.onMouse1Up = new Signal();
+		this.onMouse2Down = new Signal();
+		this.onMouse2Up = new Signal();
+		this.onMouseScroll = new Signal();
+		this.onMouseScrollDown = new Signal();
+		this.onMouseScrollUp = new Signal();
+	}
+	
+	public int getMouseX() {
+		return this.mouseX;
+	}
+	
+	public int getMouseY() {
+		return this.mouseY;
+	}
+	
+	public int getScrollZ() {
+		return this.scrollZ;
+	}
+	
+	public boolean isKeyIntDown(int keyInt) {
+		return this.active_keys_ints.contains(keyInt);
+	}
+	
+	public boolean isKeyIntUp(int keyInt) {
+		return !this.isKeyIntDown(keyInt);
+	}
+	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent event) {
+		this.scrollZ = event.getWheelRotation();
+		this.onMouseScroll.Fire();
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent event) {
+		this.mouseX = event.getX();
+		this.mouseY = event.getY();
+		this.onMouseMove.Fire();
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent event) {
+		this.mouseX = event.getX();
+		this.mouseY = event.getY();
+		this.onMouseMove.Fire();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {
+		this.active_keys_ints.add(event.getButton());
+		if (event.getButton() == 1) {
+			this.button1Down = true;
+			this.onMouse1Down.Fire();
+		} else if (event.getButton() == 2) {
+			this.button2Down = true;
+			this.onMouse2Down.Fire();
+		} else if (event.getButton() == 3) {
+			this.buttonScrollDown = true;
+			this.onMouseScrollDown.Fire();
 		}
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent event) { this.scroll = event.getWheelRotation(); }
-
-	@Override
-	public void mouseDragged(MouseEvent event) { this.mouseX = event.getX(); this.mouseY = event.getY(); }
-
-	@Override
-	public void mouseMoved(MouseEvent event) { this.mouseX = event.getX(); this.mouseY = event.getY(); }
-
-	@Override
-	public void mousePressed(MouseEvent event) { this.mouseB = event.getButton(); }
-
-	@Override
-	public void mouseReleased(MouseEvent event) { this.mouseB = -1; }
+	public void mouseReleased(MouseEvent event) {
+		this.active_keys_ints.remove(event.getButton());
+		if (event.getButton() == 1) {
+			this.button1Down = false;
+			this.onMouse1Up.Fire();
+		} else if (event.getButton() == 2) {
+			this.button2Down = false;
+			this.onMouse2Up.Fire();
+		} else if (event.getButton() == 3) {
+			this.buttonScrollDown = false;
+			this.onMouseScrollUp.Fire();
+		}
+	}
 	
 	@Override
 	public void mouseClicked(MouseEvent event) { }
@@ -63,4 +129,27 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	@Override
 	public void mouseExited(MouseEvent event) { }
 	
+	public void onMouseMove(SignalListener listener) {
+		this.onMouseMove.OnEvent(listener);
+	}
+	
+	public void onMouse1Down(SignalListener listener) {
+		this.onMouse1Down.OnEvent(listener);
+	}
+	
+	public void onMouse1Up(SignalListener listener) {
+		this.onMouse1Up.OnEvent(listener);
+	}
+	
+	public void onMouse2Down(SignalListener listener) {
+		this.onMouse1Down.OnEvent(listener);
+	}
+	
+	public void onMouse2Up(SignalListener listener) {
+		this.onMouse1Up.OnEvent(listener);
+	}
+	
+	public void onMouse2Scroll(SignalListener listener) {
+		this.onMouseScroll.OnEvent(listener);
+	}
 }

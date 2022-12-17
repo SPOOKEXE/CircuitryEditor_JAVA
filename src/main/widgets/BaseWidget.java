@@ -196,19 +196,14 @@ public class BaseWidget {
 					imgLabel.setSizeHash(absSizeHash);
 					
 					Image scaled = null;
-					
-					switch (scaleType) {
-						case STRETCH:
-							scaled = GraphicUtility.StretchImageToSize(imgLabel.getRawImage(), absSize);
-							break;
-						case FIT:
-							scaled = GraphicUtility.ScaleAndFitImage(imgLabel.getRawImage(), absSize, true);
-							break;
-						case CROP:
-							scaled = GraphicUtility.ScaleAndFitImage(imgLabel.getRawImage(), absSize, false);
-							break;
-						default:
-							System.out.println("Unsupported ImageScaleType Enum: " + scaleType);
+					if (scaleType == ImageScaleType.STRETCH) {
+						scaled = GraphicUtility.StretchImageToSize(imgLabel.getRawImage(), absSize);
+					} else if (scaleType == ImageScaleType.FIT) {
+						scaled = GraphicUtility.ScaleAndFitImage(imgLabel.getRawImage(), absSize, true);
+					} else if (scaleType == ImageScaleType.CROP) {
+						scaled = GraphicUtility.ScaleAndFitImage(imgLabel.getRawImage(), absSize, false);
+					} else {
+						System.out.println("Unsupported ImageScaleType Enum: " + scaleType);
 					}
 					
 					imgLabel.setScaledImage( scaled );

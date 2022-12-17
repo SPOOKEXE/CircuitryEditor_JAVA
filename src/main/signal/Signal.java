@@ -50,6 +50,10 @@ public class Signal {
 		}
 	}
 	
+	public void Fire() {
+		this.Fire(null);
+	}
+	
 	public void OnEvent(SignalListener...listeners) {
 		if (this.disconnected) {
 			return;

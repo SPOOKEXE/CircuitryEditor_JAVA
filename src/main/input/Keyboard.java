@@ -2,35 +2,59 @@ package main.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
+
+import main.signal.Signal;
+import main.signal.SignalListener;
 
 public class Keyboard implements KeyListener {
 
+	// Fields //
 	private boolean[] keys = new boolean[66568];
-	private boolean left, right, up, down, forward, backward;
+
+	public Signal onInputBegin;
+	public Signal onInputEnded;
 	
-	public void update() {
-		this.left = this.keys[KeyEvent.VK_LEFT] || this.keys[KeyEvent.VK_A];
-		this.right = this.keys[KeyEvent.VK_RIGHT] || this.keys[KeyEvent.VK_D];
-		this.forward = this.keys[KeyEvent.VK_UP] || this.keys[KeyEvent.VK_W];
-		this.backward = this.keys[KeyEvent.VK_DOWN] || this.keys[KeyEvent.VK_S];
-		this.up = this.keys[KeyEvent.VK_SPACE] || this.keys[KeyEvent.VK_Q];
-		this.down = this.keys[KeyEvent.VK_SHIFT] || this.keys[KeyEvent.VK_E];
+	// Constructors //
+	public Keyboard() {
+		this.setDefault();
 	}
 	
-	public boolean getUp() { return this.up; }
-	public boolean getDown() { return this.down; }
-	public boolean getRight() { return this.right; }
-	public boolean getLeft() { return this.left; }
-	public boolean getForward() { return this.forward; }
-	public boolean getBackward() { return this.backward; }
+	// Class Methods //
+	private void setDefault() {
+		this.onInputBegin = new Signal();
+		this.onInputEnded = new Signal();
+	}
 	
 	@Override
-	public void keyTyped(KeyEvent e) { }
+	public void keyTyped(KeyEvent e) {
+		
+	}
 
 	@Override
-	public void keyPressed(KeyEvent e) { keys[ e.getKeyCode() ] = true; }
+	public void keyPressed(KeyEvent e) {
+		keys[ e.getKeyCode() ] = true;
+		
+		HashMap<String, Object> args = new HashMap<String, Object>();
+		args.put("KeyCode", e.getKeyCode());
+		this.onInputBegin.Fire(args);
+	}
 
 	@Override
-	public void keyReleased(KeyEvent e) { keys[ e.getKeyCode() ] = false; }
+	public void keyReleased(KeyEvent e) {
+		keys[ e.getKeyCode() ] = false;
+		
+		HashMap<String, Object> args = new HashMap<String, Object>();
+		args.put("KeyCode", e.getKeyCode());
+		this.onInputEnded.Fire(args);
+	}
+	
+	public void onInputBegin(SignalListener listener) {
+		this.onInputBegin.OnEvent(listener);
+	}
+	
+	public void onInputEnded(SignalListener listener) {
+		this.onInputEnded.OnEvent(listener);
+	}
 	
 }

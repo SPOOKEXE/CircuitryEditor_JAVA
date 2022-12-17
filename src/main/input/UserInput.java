@@ -2,26 +2,28 @@ package main.input;
 
 public class UserInput {
 
-	public static Mouse mouse;
-	public static Keyboard keyboard;
+	// Fields //
+	public Mouse mouse;
+	public Keyboard keyboard;
 	
+	// Constructors //
 	public UserInput() {
-		mouse = new Mouse();
-		keyboard = new Keyboard();
+		this.mouse = new Mouse();
+		this.keyboard = new Keyboard();
 	}
 	
 	public UserInput( Mouse nmouse, Keyboard nkeyboard ) {
-		mouse = nmouse;
-		keyboard = nkeyboard;
+		this.mouse = nmouse;
+		this.keyboard = nkeyboard;
 	}
 	
-	/*
-	 * TODO: event handling for
-	 * - on mouse changed
-	 * - on mouse left click
-	 * - on mouse right click
-	 * - on keyboard key press
-	 * - on keyboard key release
-	 */
+	// Class Methods //
+	public Mouse getMouse() {
+		return this.mouse;
+	}
+	
+	public Keyboard getKeyboard() {
+		return this.keyboard;
+	}
 	
 }
