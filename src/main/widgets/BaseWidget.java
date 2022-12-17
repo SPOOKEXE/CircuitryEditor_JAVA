@@ -208,7 +208,8 @@ public class BaseWidget {
 				Image drawImage = imgLabel.getScaledImage();
 				if (drawImage != null) {
 					// TODO: get the scaled image to position in the top-middle of the frame (or have an anchor point for it)
-					g2d.drawImage(drawImage, absPosition.x, absPosition.y, drawImage.getWidth(null), drawImage.getHeight(null), null);
+					int wdth = (int) ((absSize.x / 2) - (drawImage.getWidth(null) / 2));
+					g2d.drawImage(drawImage, absPosition.x + wdth, absPosition.y, drawImage.getWidth(null), drawImage.getHeight(null), null);
 				}
 				
 				// reset transparency

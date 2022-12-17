@@ -77,7 +77,6 @@ public class EditorWidget extends BaseWidget {
 		AspectRatioConstraint constraint = new AspectRatioConstraint();
 		constraint.aspectRatio = 3;
 		constraint.setParent(testImage1);
-		this.appendGuiObjects(testImage1);
 		
 		ImageLabel testImage2 = new ImageLabel();
 		testImage2.setName("Test Image 2");
@@ -95,7 +94,8 @@ public class EditorWidget extends BaseWidget {
 		constraint2.aspectRatio = 3;
 		constraint2.setDominantAxis(DominantAxis.Height);
 		constraint2.setParent(testImage2);
-		this.appendGuiObjects(testImage2);
+		
+		this.appendGuiObjects(testImage1, testImage2);
 		
 //		GuiEvents imageLabelEvents = testImage1.getGuiEvents();
 //		imageLabelEvents.onMouseEnter(new SignalListener() {
