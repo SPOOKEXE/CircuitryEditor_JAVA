@@ -115,6 +115,13 @@ public class EditorWidget extends BaseWidget {
 			}
 		});
 		
+		imageLabelEvents.onMouseScrolled(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println("Mouse Scrolled: " + args);
+			}
+		});
+		
 		imageLabelEvents.onMouse1Down(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
@@ -128,6 +135,20 @@ public class EditorWidget extends BaseWidget {
 				boolean flip = (boolean) this.data.get("flip");
 				testImage1.setAnchorPoint(flip ? new Vector2(1F, 1F) : new Vector2());
 				this.data.put("flip", !flip);
+			}
+		});
+		
+		imageLabelEvents.onMouseScrolled(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println(args);
+			}
+		});
+		
+		imageLabelEvents.onInputBegin(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				System.out.println(args);
 			}
 		});
 		

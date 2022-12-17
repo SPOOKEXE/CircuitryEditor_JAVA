@@ -10,18 +10,19 @@ public class GuiEvents {
 
 	// Fields //
 	
-	// TODO: implement in BaseWidget
 	public Signal onMouseEnter;
 	public Signal onMouseMove;
 	public Signal onMouseLeave;
 	
-	// TODO: implement in BaseWidget
 	public Signal onMouse1Down;
 	public Signal onMouse1Up;
 	public Signal onMouse2Down;
 	public Signal onMouse2Up;
 	
-	// TODO: implement in BaseWidget
+	public Signal onMouseScrolled;
+	public Signal onMouseScrollDown;
+	public Signal onMouseScrollUp;
+	
 	public Signal onInputBegin;
 	public Signal onInputChanged;
 	public Signal onInputEnded;
@@ -41,6 +42,10 @@ public class GuiEvents {
 		this.onMouse1Up = new Signal();
 		this.onMouse2Down = new Signal();
 		this.onMouse2Up = new Signal();
+		
+		this.onMouseScrolled = new Signal();
+		this.onMouseScrollDown = new Signal();
+		this.onMouseScrollUp = new Signal();
 		
 		this.onInputBegin = new Signal();
 		this.onInputChanged = new Signal();
@@ -80,6 +85,27 @@ public class GuiEvents {
 			}
 		});
 		
+		userInput.getMouse().onMouseScrollDown.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				self.onMouseScrollDown.Fire(args);
+			}
+		});
+		
+		userInput.getMouse().onMouseScrollUp.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				self.onMouseScrollUp.Fire(args);
+			}
+		});
+		
+		userInput.getMouse().onMouseScrolled.OnEvent(new SignalListener() {
+			@Override
+			public void handle(HashMap<String, Object> args) {
+				self.onMouseScrolled.Fire(args);
+			}
+		});
+		
 	}
 	
 	public void onMouseEnter(SignalListener listener) {
@@ -108,6 +134,10 @@ public class GuiEvents {
 	
 	public void onMouse2Up(SignalListener listener) {
 		this.onMouse2Up.OnEvent(listener);
+	}
+	
+	public void onMouseScrolled(SignalListener listener) {
+		this.onMouseScrolled.OnEvent(listener);
 	}
 	
 	public void onInputBegin(SignalListener listener) {

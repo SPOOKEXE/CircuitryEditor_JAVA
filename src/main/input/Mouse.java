@@ -6,6 +6,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import main.signal.Signal;
 import main.signal.SignalListener;
@@ -29,7 +30,7 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	public Signal onMouse1Up;
 	public Signal onMouse2Down;
 	public Signal onMouse2Up;
-	public Signal onMouseScroll;
+	public Signal onMouseScrolled;
 	public Signal onMouseScrollDown;
 	public Signal onMouseScrollUp;
 	
@@ -59,7 +60,7 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 		this.onMouse1Up = new Signal();
 		this.onMouse2Down = new Signal();
 		this.onMouse2Up = new Signal();
-		this.onMouseScroll = new Signal();
+		this.onMouseScrolled = new Signal();
 		this.onMouseScrollDown = new Signal();
 		this.onMouseScrollUp = new Signal();
 		
@@ -90,7 +91,10 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent event) {
 		this.scrollZ = event.getWheelRotation();
-		this.onMouseScroll.Fire();
+		
+		HashMap<String, Object> args = new HashMap<String, Object>();
+		args.put("Delta", this.scrollZ);
+		this.onMouseScrolled.Fire(args);
 	}
 
 	@Override
@@ -185,7 +189,7 @@ public class Mouse implements MouseListener, MouseMotionListener, MouseWheelList
 	}
 	
 	public void onMouseScrolled(SignalListener listener) {
-		this.onMouseScroll.OnEvent(listener);
+		this.onMouseScrolled.OnEvent(listener);
 	}
 	
 }

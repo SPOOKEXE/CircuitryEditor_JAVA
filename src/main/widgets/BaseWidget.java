@@ -14,6 +14,7 @@ import java.util.HashMap;
 import main.display.variations.SimpleViewport;
 import main.enumerations.ImageScaleType;
 import main.enumerations.ZIndexSortType;
+import main.input.Keyboard;
 import main.input.Mouse;
 import main.input.UserInput;
 import main.math.Intersects;
@@ -21,6 +22,7 @@ import main.math.Vector2;
 import main.math.Vector2int;
 import main.signal.SignalListener;
 import main.utility.GraphicUtility;
+import main.widgets.events.GuiEvents;
 import main.widgets.managers.GuiObjectManager;
 import main.widgets.objects.GuiBase;
 import main.widgets.objects.GuiObject;
@@ -36,6 +38,7 @@ public class BaseWidget {
 	protected GuiBase baseGuiData;
 	protected UserInput userInput;
 	protected GuiObjectManager guiObjectManager;
+	protected GuiEvents widgetEvents;
 	
 	// Constructors //
 	public BaseWidget() {
@@ -53,6 +56,7 @@ public class BaseWidget {
 		this.guiObjectManager = new GuiObjectManager(ZIndexSortType.Global);
 		
 		this.userInput.setupListeners(this.baseCanvas.getFrame()); // setup listeners
+		this.widgetEvents = new GuiEvents();
 	}
 	
 	public ArrayList<GuiObject> getSortedRenders() {
@@ -159,7 +163,10 @@ public class BaseWidget {
             }
         });
 		
-		this.getUserInput().getMouse().onMouseMove(new SignalListener() {
+		Mouse mouseObj = this.getUserInput().getMouse();
+		Keyboard keyboard = this.getUserInput().getKeyboard();
+		
+		mouseObj.onMouseMove(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				ArrayList<GuiObject> uiObjs = getGuiObjectsAtActiveMouse();
@@ -167,6 +174,7 @@ public class BaseWidget {
 				// handle mouse enter, move, and leave of GuiObjects
 				GuiObject hovered = uiObjs.size() != 0 ? uiObjs.get(0) : null;
 				if (hovered != null) {
+					self.widgetEvents.onMouseLeave.Fire(args);
 					Object mouseHoveredObject = this.data.get("Hovered");
 					if (mouseHoveredObject != null) {
 						((GuiObject)mouseHoveredObject).getGuiEvents().onMouseMove.Fire(args);
@@ -185,99 +193,109 @@ public class BaseWidget {
 				Object mouseHoveredObject = this.data.get("Hovered");
 				if (mouseHoveredObject != null) {
 					((GuiObject)mouseHoveredObject).getGuiEvents().onMouseLeave.Fire(args);
+					self.widgetEvents.onMouseEnter.Fire(args);
 				}
 				
 				this.data.put("Hovered", null);
-				// mouse moved in base widget frame
+				self.widgetEvents.onMouseMove.Fire(args);
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouse1Down(new SignalListener() {
+		mouseObj.onMouse1Down(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
-				
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
 					uiObjs.get(0).getGuiEvents().onMouse1Down.Fire(args);
 					return;
 				}
-				
-				System.out.println("mouse 1 down");
-				
+				self.widgetEvents.onMouse1Down.Fire();
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouse1Up(new SignalListener() {
+		mouseObj.onMouse1Up(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
-				
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
 					uiObjs.get(0).getGuiEvents().onMouse1Up.Fire(args);
 					return;
 				}
-				
-				System.out.println("mouse 1 up");
-				
+				self.widgetEvents.onMouse1Up.Fire();
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouse2Down(new SignalListener() {
+		mouseObj.onMouse2Down(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
-				
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
 					uiObjs.get(0).getGuiEvents().onMouse2Down.Fire(args);
 					return;
 				}
-				
-				System.out.println("mouse 2 down");
-				
+				self.widgetEvents.onMouse2Down.Fire();
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouse2Up(new SignalListener() {
+		mouseObj.onMouse2Up(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
-				
 				Mouse mouse = self.getUserInput().getMouse();
 				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
 				if (uiObjs != null && uiObjs.size() > 0) {
 					uiObjs.get(0).getGuiEvents().onMouse2Up.Fire(args);
 					return;
 				}
-				
-				System.out.println("mouse 2 up");
-				
+				self.widgetEvents.onMouse2Up.Fire();
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouseScrollDown(new SignalListener() {
+		mouseObj.onMouseScrollDown(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
-				System.out.println("mouse scroll down");
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onMouseScrollDown.Fire(args);
+					return;
+				}
+//				System.out.println("mouse scroll down");
+				self.widgetEvents.onMouseScrollDown.Fire(args);
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouseScrollUp(new SignalListener() {
+		mouseObj.onMouseScrollUp(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
-				System.out.println("mouse scroll up");
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onMouseScrollUp.Fire(args);
+					return;
+				}
+//				System.out.println("mouse scroll up");
+				self.widgetEvents.onMouseScrollUp.Fire(args);
 			}
 		});
 		
-		this.getUserInput().getMouse().onMouseScrolled(new SignalListener() {
+		mouseObj.onMouseScrolled(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
-				System.out.println("mouse scrolled");
+				Mouse mouse = self.getUserInput().getMouse();
+				ArrayList<GuiObject> uiObjs = self.getGuiObjectsAtMouseXY( mouse.getMouseX(), mouse.getMouseY() );
+				if (uiObjs != null && uiObjs.size() > 0) {
+					uiObjs.get(0).getGuiEvents().onMouseScrolled.Fire(args);
+					return;
+				}
+//				System.out.println("mouse scrolled : " + args);
+				self.widgetEvents.onMouseScrolled.Fire(args);
 			}
 		});
 		
-		this.getUserInput().getKeyboard().onInputBegin(new SignalListener() {
+		keyboard.onInputBegin(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				Mouse mouse = self.getUserInput().getMouse();
@@ -286,12 +304,12 @@ public class BaseWidget {
 					uiObjs.get(0).getGuiEvents().onInputBegin.Fire(args);
 					return;
 				}
-				
-				System.out.println("released pressed: " + args.get("KeyChar"));
+				// System.out.println("released pressed: " + args.get("KeyChar"));
+				self.widgetEvents.onInputBegin.Fire(args);
 			}
 		});
 		
-		this.getUserInput().getKeyboard().onInputEnded(new SignalListener() {
+		keyboard.onInputEnded(new SignalListener() {
 			@Override
 			public void handle(HashMap<String, Object> args) {
 				Mouse mouse = self.getUserInput().getMouse();
@@ -300,8 +318,8 @@ public class BaseWidget {
 					uiObjs.get(0).getGuiEvents().onInputEnded.Fire(args);
 					return;
 				}
-				
-				System.out.println("released key: " + args.get("KeyChar"));
+				// System.out.println("released key: " + args.get("KeyChar"));
+				self.widgetEvents.onInputEnded.Fire(args);
 			}
 		});
 		
