@@ -28,4 +28,9 @@ public class UIScale extends Instance {
 		return useThis.mult(this.scale);
 	}
 	
+	@Override
+	public void deserialize(String serialized) {
+		super.deserialize(serialized);
+	}
+	
 }

@@ -1,12 +1,17 @@
 package main.widgets.objects;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import main.data.Attributes;
 
 public class Instance {
 
+	private final String FAILED_SERIALIZE_ERR = "Could not get field for serializer: {} - {}";
+	
 	// Fields //
 	protected String uid;
 	protected String name;
@@ -224,6 +229,60 @@ public class Instance {
 		return
 			this.getClass().getSimpleName() + " [uid=" + uid + ", name=" + name + ", parent=" +
 			parent + ", children=" + children + ", attributes=" + attributes + "]";
+	}
+	
+	public String serialize(List<String> ignoreProperies) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getClass().getSimpleName());
+		sb.append("*");
+		for (Field f : getClass().getDeclaredFields()) {
+			if (ignoreProperies != null && ignoreProperies.contains(f.getName())) {
+				continue;
+			}
+			sb.append(f.getName());
+		    sb.append("=");
+		    try {
+		    	Object value = f.get(this);
+		    	if (value instanceof Enum) {
+		    		String enumString = ((Enum) value).getDeclaringClass().getSimpleName() + "." + value.toString();
+		    		sb.append(enumString);
+		    		System.out.println(enumString);
+		    	} else if (value instanceof Number || value instanceof Boolean) {
+		    		sb.append(value.toString());
+		    	} else {
+		    		sb.append('"' + value.toString() + '"');
+		    	}
+			} catch (Exception e) {
+				System.out.println(FAILED_SERIALIZE_ERR.formatted(this.getClass().getSimpleName(), f.getName()));
+			}
+		    sb.append(",");
+		}
+		return sb.toString();
+	}
+	
+	public String serialize() {
+		return this.serialize(null);
+	}
+	
+	public void deserialize(String serialized) {
+//		Map<String, Object> serializedMap = new HashMap<String, Object>();
+		ArrayList<String> classNameGroups = new ArrayList<String>();
+		classNameGroups.addAll( Arrays.asList(serialized.split("\\*")) );
+		String className = classNameGroups.remove(0);
+		System.out.println("Class: " + className);
+		String properties = classNameGroups.remove(0);
+		for (String propertyNameValue : properties.split(",")) {
+//			String[] splits = propertyNameValue.split("=");
+//			String propertyName = splits[0];
+//			String propertyValue = splits[1];
+			System.out.println("- " + propertyNameValue);
+		}
+	}
+	
+	public static Instance deserializer(String serialized) {
+		Instance base = new Instance();
+		base.deserialize(serialized);
+		return base;
 	}
 	
 }

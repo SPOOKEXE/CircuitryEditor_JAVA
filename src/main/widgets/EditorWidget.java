@@ -84,6 +84,12 @@ public class EditorWidget extends BaseWidget {
 		uscale.scale = 3;
 		uscale.setParent(testImage1);
 		
+		String serial = testImage1.serialize();
+		System.out.println(serial.toString());
+		ImageLabel des_img = new ImageLabel();
+		des_img.deserialize(serial);
+//		System.out.println(des_scale.toString());
+		
 //		ImageLabel testImage2 = new ImageLabel();
 //		testImage2.setName("Test Image 2");
 //		testImage2.setAnchorPoint(new Vector2(1F, 1F));

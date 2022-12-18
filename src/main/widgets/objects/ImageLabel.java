@@ -3,6 +3,8 @@ package main.widgets.objects;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -103,5 +105,10 @@ public class ImageLabel extends GuiObject {
 			scaleType + ", imageTransparency=" + imageTransparency + "]";
 	}
 	
+	@Override
+	public String serialize() {
+		List<String> ignores = Arrays.asList( new String[] { "rawImage", "scaledImage", "absHashCode" } );
+		return this.serialize( ignores );
+	}
 	
 }
