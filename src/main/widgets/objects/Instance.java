@@ -244,7 +244,8 @@ public class Instance {
 		    try {
 		    	Object value = f.get(this);
 		    	if (value instanceof Enum) {
-		    		String enumString = ((Enum) value).getDeclaringClass().getSimpleName() + "." + value.toString();
+		    		@SuppressWarnings("rawtypes")
+					String enumString = ((Enum) value).getDeclaringClass().getSimpleName() + "." + value.toString();
 		    		sb.append(enumString);
 		    		System.out.println(enumString);
 		    	} else if (value instanceof Number || value instanceof Boolean) {

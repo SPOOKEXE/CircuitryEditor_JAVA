@@ -123,11 +123,17 @@ public class BaseWidget {
 	}
 	
 	public ArrayList<GuiObject> getGuiObjectsAtMouseXY(Vector2int mouseXY) {
-		// TODO: getGuiObjectsAtMouseXY >> check anchor point
+		// TODO: getGuiObjectsAtMouseXY >> check anchor point (finish implementation)
 		ArrayList<GuiObject> objects = new ArrayList<GuiObject>();
 		for (GuiObject guiObj : this.getSortedRenders()) {
 			Vector2int absP = guiObj.getAbsolutePosition();
 			Vector2int absS = guiObj.getAbsoluteSize();
+			
+			Vector2 anchor = guiObj.getAnchorPoint();
+			Vector2int anchoredAbsS = new Vector2int( absS.x * anchor.x, absS.y * anchor.y );
+			
+			absP = absP.sub(anchoredAbsS);
+			
 			if (Intersects.PointInSquare( mouseXY, absP, absP.add( absS ))) {
 				objects.add(guiObj);
 			}
@@ -364,7 +370,6 @@ public class BaseWidget {
 			// TODO: implement clip descendants + image clipping
 			// TODO: implement parent-zIndex GuiObject sorting part (ZIndexSortType.Sibling)
 			// TODO: implement 'ui-padding'
-			// TODO: implement 'ui-scale'
 			
 			Vector2int absPosition = rObject.getAbsolutePosition();
 			Vector2int absSize = rObject.getAbsoluteSize();
