@@ -34,7 +34,9 @@ public class Keyboard implements KeyListener {
 		this.specialkeyMapping.put(27, "ESCAPE");
 		this.specialkeyMapping.put(16, "SHIFT");
 		this.specialkeyMapping.put(17, "CONTROL");
+		this.specialkeyMapping.put(18, "ALT");
 		this.specialkeyMapping.put(20, "CAPS_LOCK");
+		this.specialkeyMapping.put(524, "WINDOWS_KEY");
 	}
 	
 	@Override
@@ -43,7 +45,7 @@ public class Keyboard implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		// prevent spam into events
+		// prevents fast-repeat-triggers in events
 		if (activeKeys.get((Object) e.getKeyCode()) != null) {
 			return;
 		}
