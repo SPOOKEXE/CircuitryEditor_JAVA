@@ -43,7 +43,7 @@ public class GuiObject extends GuiBase {
 		this.clipDescendants = true;
 		this.guiEvents = new GuiEvents();
 		
-		this.showAnchorPoint = true;
+		this.showAnchorPoint = false;
 	}
 	
 	public float getBackgroundTransparency() {

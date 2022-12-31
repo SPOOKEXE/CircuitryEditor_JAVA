@@ -1,17 +1,10 @@
 package main.widgets;
 
-import java.util.HashMap;
-
-import main.enumerations.ImageScaleType;
 import main.math.Color3;
 import main.math.UDim2;
 import main.math.Vector2;
-import main.signal.SignalListener;
-import main.widgets.events.GuiEvents;
-import main.widgets.objects.AspectRatioConstraint;
+import main.math.Vector2int;
 import main.widgets.objects.Frame;
-import main.widgets.objects.ImageLabel;
-import main.widgets.objects.UIScale;
 
 public class EditorWidget extends BaseWidget {
 
@@ -26,168 +19,40 @@ public class EditorWidget extends BaseWidget {
 
 	// Class Methods //
 	private void setDefault() {
+		Frame containerFrame = new Frame();
+		containerFrame.setName("Background");
+		containerFrame.setBackgroundColor3(Color3.fromRGB(48, 48, 48));
+		containerFrame.setSize(new UDim2(1, 0, 1, 0));
+		containerFrame.setPosition(new UDim2(0, 0, 0, 0));
+		containerFrame.setZIndex(1);
+		containerFrame.setParent(this.baseGuiData);
 		
-		// Test Frames
-		Frame testFrame1 = new Frame();
-		testFrame1.setName("Test Frame 1");
-		testFrame1.setBackgroundColor3(Color3.fromRGB(255, 0, 0));
-		testFrame1.setBackgroundTransparency(0.3F);
-		testFrame1.setSize(new UDim2(0.5, 0, 0.5, 0));
-		testFrame1.setPosition(new UDim2(0.35, 0, 0.35, 0));
-		testFrame1.setZIndex(5);
-		testFrame1.setParent(this.baseGuiData);
-
-		Frame testFrame2 = new Frame();
-		testFrame2.setName("Test Frame 2");
-		testFrame2.setBackgroundColor3(Color3.fromRGB(0, 0, 255));
-		testFrame2.setSize(new UDim2(0.25, 0, 0.25, 0));
-		testFrame2.setPosition(new UDim2(0.1, 0, 0.1, 0));
-		testFrame2.setZIndex(3);
-		testFrame2.setParent(this.baseGuiData);
-
-		Frame testFrame3 = new Frame();
-		testFrame3.setName("Test Frame 3");
-		testFrame3.setBackgroundColor3(Color3.fromRGB(0, 255, 0));
-		testFrame3.setBackgroundTransparency(0.3F);
-		testFrame3.setSize(new UDim2(0.25, 0, 0.5, 0));
-		testFrame3.setPosition(new UDim2(0.5, 0, 0.25, 0));
-		testFrame3.setZIndex(4);
-		testFrame3.setParent(testFrame2);
+		Frame actionBar = new Frame();
+		actionBar.setName("ActionBar");
+		actionBar.setBackgroundColor3(Color3.fromRGB(80,80,80));
+		actionBar.setSize(new UDim2(1, 0, 0.15, 0));
+		actionBar.setPosition(new UDim2(0, 0, 0, 0));
+		actionBar.setZIndex(2);
+		actionBar.setParent(containerFrame);
 		
-		Frame testFrame4 = new Frame();
-		testFrame4.setName("Test Frame 4");
-		testFrame4.setBackgroundColor3(Color3.fromRGB(0, 255, 0));
-		testFrame4.setSize(new UDim2(0.25, 0, 0.5, 0));
-		testFrame4.setPosition(new UDim2(0.25, 0, 0.25, 0));
-		testFrame4.setZIndex(5);
-		testFrame4.setParent(testFrame2);
+		Frame componentList = new Frame();
+		componentList.setName("ComponentsList");
+		componentList.setAnchorPoint( new Vector2(1, 0) );
+		componentList.setBackgroundColor3(Color3.fromRGB(120,80,80));
+		componentList.setSize(new UDim2(0.2, 0, 0.85, 0));
+		componentList.setPosition(new UDim2(1, 0, 0.15, 0));
+		componentList.setZIndex(3);
+		componentList.setParent(containerFrame);
 		
-		this.appendGuiObjects( testFrame1, testFrame2, testFrame3, testFrame4);
-		
-		ImageLabel testImage1 = new ImageLabel();
-		testImage1.setName("Test Image 1");
-		testImage1.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
-		testImage1.setAnchorPoint(new Vector2(0.5F, 0.5F));
-		testImage1.setSize(new UDim2(0.1, 0, 0.1, 0));
-		testImage1.setPosition(new UDim2(0.45, 0, 0.45, 0));
-		testImage1.setZIndex(8);
-		testImage1.setBackgroundTransparency(0.5F);
-		testImage1.setImageScaleType(ImageScaleType.FIT);
-		testImage1.setOutlineEnabled(true);
-		testImage1.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
-		testImage1.setImageTransparency(0.3F);
-		testImage1.setParent(this.baseGuiData);
-		AspectRatioConstraint constraint = new AspectRatioConstraint();
-		constraint.aspectRatio = 1;
-		constraint.setParent(testImage1);
-		UIScale uscale = new UIScale();
-		uscale.scale = 3;
-		uscale.setParent(testImage1);
-		
-		String serial = testImage1.serialize();
-		System.out.println(serial.toString());
-		ImageLabel des_img = new ImageLabel();
-		des_img.deserialize(serial);
-//		System.out.println(des_scale.toString());
-		
-//		ImageLabel testImage2 = new ImageLabel();
-//		testImage2.setName("Test Image 2");
-//		testImage2.setAnchorPoint(new Vector2(1F, 1F));
-//		testImage2.setBackgroundColor3(Color3.fromRGB(200, 200, 200));
-//		testImage2.setSize(new UDim2(0.1, 0, 0.1, 0));
-//		testImage2.setPosition(new UDim2(0.45, 0, 0.45, 0));
-//		testImage2.setZIndex(9);
-//		testImage2.setBackgroundTransparency(0.5F);
-//		testImage2.setImageScaleType(ImageScaleType.FIT);
-//		testImage2.setOutlineEnabled(true);
-//		testImage2.setImagePath("D:\\vcbcvxbvxcbcvxb.png");
-//		testImage2.setImageTransparency(0.3F);
-//		testImage2.setParent(this.baseGuiData);
-//		AspectRatioConstraint constraint2 = new AspectRatioConstraint();
-//		constraint2.aspectRatio = 1;
-//		constraint2.setParent(testImage2);
-		
-		this.appendGuiObjects(testImage1);//, testImage2);
-		
-		GuiEvents imageLabelEvents = testImage1.getGuiEvents();
-		
-		imageLabelEvents.onMouseEnter(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println("Mouse has entered the test image frame!");
-				System.out.println("Args: " + args);
-			}
-		});
-		
-		imageLabelEvents.onMouseLeave(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println("Mouse has left the test image frame!");
-				System.out.println("Args: " + args);
-			}
-		});
-		
-		imageLabelEvents.onMouseScrolled(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println("Mouse Scrolled: " + args);
-			}
-		});
-		
-		imageLabelEvents.onMouse1Down(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println("Mouse has left clicked the test image frame!");
-				System.out.println(args);
-				
-				if (this.data.get("flip") == null) {
-					this.data.put("flip", true);
-				}
-				
-				boolean flip = (boolean) this.data.get("flip");
-				testImage1.setAnchorPoint(flip ? new Vector2(0.75F, 0.75F) : new Vector2(0.25F, 0.25F));
-				this.data.put("flip", !flip);
-			}
-		});
-		
-		imageLabelEvents.onMouse2Down(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println("Mouse has right clicked the test image frame!");
-				System.out.println(args);
-				
-				if (this.data.get("scale") == null) {
-					this.data.put("scale", 1F);
-				}
-				
-				Float scale = (Float) this.data.get("scale");
-				scale = scale + 0.5F;
-				if (scale > 3) {
-					scale = 1F;
-				}
-				uscale.scale = scale;
-				this.data.put("scale", scale);
-			}
-		});
-		
-		imageLabelEvents.onInputBegin(new SignalListener() {
-			@Override
-			public void handle(HashMap<String, Object> args) {
-				System.out.println(args);
-			}
-		});
-		
+		this.appendGuiObjects(containerFrame, actionBar, componentList);
 	}
-
+	
 	@Override
 	public boolean Init() {
 		if (!super.Init()) {
 			return false;
 		}
-
-		// on initialize
 		this.setWindowTitle("Circuitry Editor Widget");
-
 		return true;
 	}
 
@@ -209,7 +74,6 @@ public class EditorWidget extends BaseWidget {
 	@Override
 	public void Draw() {
 		super.Draw();
-
 	}
-
+	
 }

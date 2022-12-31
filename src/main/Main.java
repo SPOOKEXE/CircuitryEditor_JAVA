@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import main.widgets.BaseWidget;
 import main.widgets.EditorWidget;
+import main.widgets.TestWidget;
 
 public class Main {
 	
@@ -34,12 +35,17 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// Create all the widgets //
+		TestWidget testWidget = new TestWidget();
+		testWidget.getViewportCanvas().setVisible(true);
+		testWidget.setWindowSize(1280, 720);
+		
 		EditorWidget editorWidget = new EditorWidget();
 		editorWidget.getViewportCanvas().setVisible(true);
 		editorWidget.setWindowSize(1280, 720);
 		
 		// Widget ArrayList //
 		widgets = new ArrayList<BaseWidget>();
+		widgets.add(testWidget);
 		widgets.add(editorWidget);
 		
 		// Initialize and start all widgets //
