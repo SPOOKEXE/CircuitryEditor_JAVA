@@ -7,9 +7,13 @@ import main.widgets.EditorWidget;
 import main.widgets.TestWidget;
 
 public class Main {
-	
 	protected static ArrayList<BaseWidget> widgets;
-
+	
+	protected final static int FPS = 60;
+	
+	private static final double ns = 10e8 / FPS;
+	private static final double second = 1e3;
+	
 	public static void update() {
 		for (BaseWidget widget : widgets) {
 			widget.Update();
@@ -33,7 +37,6 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		
 		// Create all the widgets //
 		TestWidget testWidget = new TestWidget();
 		testWidget.getViewportCanvas().setVisible(true);
@@ -55,8 +58,37 @@ public class Main {
 		Main.update();
 		Main.draw();
 		
-		// Update the widgets and draw continuously //
-		// TODO: change to FPS-based not timer-based
+		// Speed-Based Update //
+		long lastTime = System.nanoTime();
+		long timer = System.currentTimeMillis();
+		int frames = 0;
+		double delta = 0;
+		
+		while (true) {
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			
+			while (delta >= 1) {
+				delta--;
+				Main.update();
+				Main.draw();
+				frames++;
+			}
+			
+			if (System.currentTimeMillis() - timer > second) {
+				timer += second;
+				// show FPS counter on title
+				for (BaseWidget widget : widgets) {
+					widget.getViewportCanvas().getFrame().setTitle(frames + " fps");
+				}
+				frames = 0;
+			}
+		}
+		
+		
+		// Update the widgets and draw on a timer //
+		/*
 		while (true) {
 			Main.update();
 			Main.draw();
@@ -65,7 +97,7 @@ public class Main {
 			} catch (InterruptedException e) {
 				break;
 			}
-		}
+		}*/
 	}
 
 }
