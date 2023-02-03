@@ -34,6 +34,10 @@ public class GraphicUtility {
 	}
 	
 	public static Image ScaleAndFitImage(Image img, int maxWidth, int maxHeight, boolean useMinimumScale) {
+		if (img == null) {
+			return null;
+		}
+		
 		float imgWidth = img.getWidth(null);
 		float imgHeight = img.getHeight(null);
 		

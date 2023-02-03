@@ -1,0 +1,13 @@
+
+TODO (backend):
+- object serialization / deserialization
+- correct mouse handling with anchor point / resize
+- fix AspectRatio
+
+TODO (circuitry program):
+- Drag N Drop Test Feature
+- Circuitry Menu
+- Electrical Graph Data & Setup
+- Images and stuff into a resources folder
+- Circuitry connections
+- Runtime circuit resolver

@@ -53,10 +53,10 @@ public class SimpleViewport extends Display implements IDisplay {
 		super.setTitle(title);
 	}
 
-	@Override
-	public void setFPS(int FPS) {
-		super.setFPS(FPS);
-	}
+//	@Override
+//	public void setFPS(int FPS) {
+//		super.setFPS(FPS);
+//	}
 
 	@Override
 	public void setVisible(boolean visible) {
@@ -78,10 +78,10 @@ public class SimpleViewport extends Display implements IDisplay {
 		return super.getHeight();
 	}
 
-	@Override
-	public int getFPS() {
-		return super.getFPS();
-	}
+//	@Override
+//	public int getFPS() {
+//		return super.getFPS();
+//	}
 
 	@Override
 	public boolean isVisible() {

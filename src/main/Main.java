@@ -9,10 +9,15 @@ import main.widgets.TestWidget;
 public class Main {
 	protected static ArrayList<BaseWidget> widgets;
 	
-	protected final static int FPS = 60;
+	protected static int FPS = 60;
 	
-	private static final double ns = 10e8 / FPS;
-	private static final double second = 1e3;
+	private static double ns = 10e8 / FPS;
+	private static double second = 1e3;
+	
+	public static void setFPS(int fps) {
+		FPS = fps;
+		ns = 10e8 / fps;
+	}
 	
 	public static void update() {
 		for (BaseWidget widget : widgets) {

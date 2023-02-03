@@ -77,15 +77,15 @@ public class Display implements IDisplay {
 		}
 	}
 
-	@Override
-	public int getFPS() {
-		return this.FPS;
-	}
-
-	@Override
-	public void setFPS(int FPS) {
-		this.FPS = FPS;
-	}
+//	@Override
+//	public int getFPS() {
+//		return this.FPS;
+//	}
+//
+//	@Override
+//	public void setFPS(int FPS) {
+//		this.FPS = FPS;
+//	}
 
 	@Override
 	public JFrame getFrame() {

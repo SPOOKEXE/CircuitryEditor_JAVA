@@ -13,7 +13,7 @@ public interface IDisplay {
 	
 	void setSize( Vector2int size );
 	void setTitle( String title );
-	void setFPS( int FPS );
+	// void setFPS( int FPS );
 	void setVisible( boolean visible );
 	void setResizable( boolean resizable );
 	
@@ -22,7 +22,7 @@ public interface IDisplay {
 	int getHeight( );
 	Vector2int getWindowSize();
 	String getTitle();
-	int getFPS();
+	// int getFPS();
 	boolean isVisible( );
 	boolean isResizable();
 	String toString( );

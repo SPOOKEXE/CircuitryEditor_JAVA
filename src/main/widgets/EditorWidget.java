@@ -3,7 +3,6 @@ package main.widgets;
 import main.math.Color3;
 import main.math.UDim2;
 import main.math.Vector2;
-import main.math.Vector2int;
 import main.widgets.objects.Frame;
 
 public class EditorWidget extends BaseWidget {
